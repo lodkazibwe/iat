@@ -8,4 +8,5 @@ public interface DepositService {
     Deposit updateDeposit(Deposit deposit);
     Deposit getDeposit(int id);
     Deposit getByMethod(PaymentMethod paymentMethod);
+    boolean existByMethod(PaymentMethod method);
 }

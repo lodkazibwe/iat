@@ -16,7 +16,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class PaymentDto {
     private int id;
-    private int externalId;
+    private String externalId;
     @NotNull (message ="amount cannot be null")
     private double amount;
     private int walletId;
@@ -28,5 +28,6 @@ public class PaymentDto {
     private PaymentMethod paymentMethod;
     private String paymentType;
     private String message;
+    private String ref;
     private String status;
 }

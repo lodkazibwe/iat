@@ -3,6 +3,7 @@ package com.iat.iat.payment.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.iat.iat.account.model.Deposit;
 import com.iat.iat.account.service.DepositService;
+import com.iat.iat.exceptions.InvalidValuesException;
 import com.iat.iat.exceptions.ResourceNotFoundException;
 import com.iat.iat.flutterWave.FlutterResp;
 import com.iat.iat.flutterWave.FlutterWaveService;
@@ -21,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -54,6 +56,7 @@ public class PaymentServiceImpl implements PaymentService {
             payment.setStatus("pending");
             payment.setCreationDateTime(new Date());
             payment.setPaymentDate(new Date());
+            payment.setExternalId("1");
             logger.info("saving payment...");
             paymentDao.save(payment);
             return initiateFW(amount, payment.getId(), user);
@@ -63,18 +66,28 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    @Transactional
     public Payment verifyFw(int tx_ref, String transactionId, String status) throws JsonProcessingException {
         if(status.equals("successful")){
 
             VerifyRespFW verifyRespFW =flutterWaveService.verify(transactionId);
             Payment payment=getById(tx_ref);
-            if(verifyRespFW.getStatus().equals("successful")
-                    && verifyRespFW.getData().getAmount()>=payment.getAmount()){
-                //payment.setExternalId(transactionId);
-                payment.setStatus("successful");
+            logger.info(""+verifyRespFW.getData().getAmount());
+            logger.info(""+verifyRespFW.getStatus());
+
+            if(verifyRespFW.getData().getFlw_ref().equals(payment.getRef())){
+                logger.info("double verification...");
+                throw new InvalidValuesException("transaction already saved!");
+            }
+
+            if(verifyRespFW.getStatus().equals("success")
+                    & verifyRespFW.getData().getAmount()>=payment.getAmount()){
+                payment.setExternalId(transactionId);
+                payment.setStatus(verifyRespFW.getStatus());
                 payment.setMessage(verifyRespFW.getMessage());
                 payment.setPaymentType(verifyRespFW.getData().getPayment_type());
                 payment.setRef(verifyRespFW.getData().getFlw_ref());
+
                 logger.info("updating wallet...");
                 walletService.updateWallet(payment);
                 logger.info("updating deposits...");
@@ -82,8 +95,8 @@ public class PaymentServiceImpl implements PaymentService {
                 return paymentDao.save(payment);
 
             }else{
-                //payment.setExternalId(transactionId);
-                payment.setStatus("successful");
+                payment.setExternalId(transactionId);
+                payment.setStatus(verifyRespFW.getStatus());
                 payment.setMessage(verifyRespFW.getMessage());
                 payment.setPaymentType(verifyRespFW.getData().getPayment_type());
                 payment.setRef(verifyRespFW.getData().getFlw_ref());
@@ -95,7 +108,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         }else{
             Payment payment=getById(tx_ref);
-            //payment.setExternalId(transactionId);
+            payment.setExternalId(transactionId);
             payment.setStatus(status);
             return paymentDao.save(payment);
         }
@@ -139,4 +152,13 @@ public class PaymentServiceImpl implements PaymentService {
         return flutterWaveService.initiate(amount, paymentId, user);
     }
 
+    @Override
+    public Payment myLastPayment() {
+        logger.info("getting current user...");
+        User user=myUserDetailsService.currentUser();
+        logger.info("getting  user wallet...");
+        Wallet wallet =walletService.getByUser(user.getId());
+        logger.info("getting  payment...");
+        return getById(wallet.getLastPayment());
+    }
 }

@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
 
 
-                .antMatchers("/ffw/**").permitAll()
+                //.antMatchers("/iat-doc.html/**").permitAll()
                 .antMatchers("/user/signUp").permitAll()
                 .antMatchers("/transaction/saving/admin/**").hasRole("ADMIN")
                 .antMatchers(

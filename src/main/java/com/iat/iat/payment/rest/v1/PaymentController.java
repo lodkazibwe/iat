@@ -33,10 +33,9 @@ public class PaymentController {
         return new ResponseEntity<>(paymentConverter.entityToDto(paymentService.verifyFw(tx_ref,transaction_id,status)), HttpStatus.OK);
     }
 
-    @GetMapping("/myPayments/{date}")
-    public ResponseEntity<List<PaymentDto>> myPayments(
-            @PathVariable @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd") Date date){
-        return new ResponseEntity<>(paymentConverter.entityToDto(paymentService.myDatePayments(date)), HttpStatus.OK);
+    @GetMapping("/myLastPayment")
+    public ResponseEntity<PaymentDto> myLastPayment(){
+        return new ResponseEntity<>(paymentConverter.entityToDto(paymentService.myLastPayment()), HttpStatus.OK);
 
     }
 

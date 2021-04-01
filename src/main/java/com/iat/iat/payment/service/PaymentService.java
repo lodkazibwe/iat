@@ -18,4 +18,5 @@ public interface PaymentService {
     Payment updatePayment(PaymentDto paymentDto);
     void deletePayment(int id);
 
+    Payment myLastPayment();
 }

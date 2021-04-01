@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DepositDao extends JpaRepository<Deposit, Integer> {
     Deposit findByPaymentMethod(PaymentMethod paymentMethod);
-
+    boolean existsByPaymentMethod(PaymentMethod paymentMethod);
 }

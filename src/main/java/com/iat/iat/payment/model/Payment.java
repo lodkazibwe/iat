@@ -16,7 +16,7 @@ public class Payment {
     @Id
     @GeneratedValue
     private int id;
-    private int externalId;
+    private String externalId;
     private int walletId;
     private double amount;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")

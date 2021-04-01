@@ -23,6 +23,7 @@ public class PaymentConverter {
         paymentDto.setStatus(payment.getStatus());
         paymentDto.setExternalId(payment.getExternalId());
         paymentDto.setPaymentType(payment.getPaymentType());
+        paymentDto.setRef(payment.getRef());
         return paymentDto;
     }
 
