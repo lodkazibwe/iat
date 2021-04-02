@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface AdminService {
     AdminUser addAdmin(AdminUserDto adminUserDto);
+    AdminUser addSuperUser();
     AdminUser getAdmin(int id);
     AdminUser getAdmin(String contact);
     List<AdminUser> getByCategory(String category);

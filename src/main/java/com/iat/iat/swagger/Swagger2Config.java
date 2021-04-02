@@ -36,11 +36,12 @@ public class Swagger2Config extends WebMvcConfigurationSupport {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("IAT API")
-                .description("Operation Lagos main API")
-                .termsOfServiceUrl("https://www.ruraaratechempire.com")
-                .contact(new Contact("Ruraara Tech Empire","https://www.ruraaratechempire.com","service@ruraara.com"))
+                .description("IAT APPLICATION DOCUMENTATION DEVICE")
+                .termsOfServiceUrl("https://www.iatplatform.com")
+                .contact(new Contact("GIGG GLOBAL DIGITAL SOLUTIONS LIMITED","https://www.iatplatform.com",
+                        "info@iatplatform.com"))
                 .license("A license given")
-                .licenseUrl("https://www.ruraaratechempire.com")
+                .licenseUrl("https://www.iatplatform.com")
                 .version("1.0")
                 .build();
     }

@@ -39,19 +39,39 @@ public class AdminServiceImpl implements AdminService {
         }
         logger.info("converting user...");
         AdminUser adminUser =adminUserConverter.dtoToEntity(adminUserDto);
-        logger.info("generating passcode...");
-        Random random = new Random();
-        String rand = String.format("%04d", random.nextInt(10000));
-        String pin ="W-"+1234;
-        logger.info("user passcode: "+pin);
-        adminUser.setPassword(passwordEncoder.encode(pin));
+        //logger.info("generating passcode...");
+        //Random random = new Random();
+        //String rand = String.format("%04d", random.nextInt(10000));
+        //String pin ="W-"+1234;
+       // logger.info("user passcode: "+pin);
+        //adminUser.setPassword(passwordEncoder.encode(pin));
         logger.info("setting user role...");
-        adminUser.setRoles(getRoles());
+        adminUser.setRoles(getRoles("ADMIN"));
         logger.info("sending pin to: "+adminUser.getContact());
         logger.info("saving user and creating wallet...");
         createWallet(adminUserDao.save(adminUser));
         return adminUser;
 
+    }
+
+    @Override
+    public AdminUser addSuperUser() {
+        logger.info("creating user...");
+        AdminUserDto adminUserDto =new AdminUserDto();
+        adminUserDto.setTittle("Super User");
+        adminUserDto.setName("rootUser");
+        adminUserDto.setContact("0000");
+        adminUserDto.setEmail("admin@iat.org");
+        adminUserDto.setPassWord("123@abc");
+
+        logger.info("converting user...");
+        AdminUser adminUser =adminUserConverter.dtoToEntity(adminUserDto);
+        logger.info("setting user role...");
+        adminUser.setRoles(getRoles("ROOT"));
+        logger.info("sending pin to: "+adminUser.getContact());
+        logger.info("saving user and creating wallet...");
+        createWallet(adminUserDao.save(adminUser));
+        return adminUser;
     }
 
     private void createWallet(User user) {
@@ -66,9 +86,9 @@ public class AdminServiceImpl implements AdminService {
         return adminUserDao.existsByContact(contact);
     }
 
-    private Set<Role> getRoles(){
+    private Set<Role> getRoles(String rol){
         logger.info("Role admin...");
-        Role role = new Role("ADMIN");
+        Role role = new Role(rol);
         return new HashSet<>(Collections.singletonList(role));
     }
 
