@@ -31,9 +31,9 @@ public class UserDataController {
         return new ResponseEntity<>(userDataConverter.entityToDto(userDataService.getUserData(id)), HttpStatus.OK);
     }
 
-    @GetMapping("/checkContact/{contact}")
-    public ResponseEntity<String> isContactAvailable(@PathVariable String contact){
-        return new ResponseEntity<>(userDataService.isContactAvailable(contact), HttpStatus.OK);
+    @GetMapping("/checkContact/{contac}")
+    public ResponseEntity<String> isContactAvailable(@PathVariable String contac){
+        return new ResponseEntity<>(userDataService.isContactAvailable(contac), HttpStatus.OK);
     }
 
 }
