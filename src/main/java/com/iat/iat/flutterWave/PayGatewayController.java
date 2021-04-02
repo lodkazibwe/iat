@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @RestController
 @RequestMapping("/fw")
-public class FlutterWaveController {
+public class PayGatewayController {
     @Autowired FlutterWaveService flutterWaveService;
 
     @PostMapping("/initiate/{amount}")
