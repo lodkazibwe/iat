@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
 
 
-                .antMatchers("userData/checkContact/**").permitAll()
+                .antMatchers("/userData/checkContact/**").permitAll()
                 .antMatchers("/user/signUp").permitAll()
                 .antMatchers("/transaction/saving/admin/**").hasRole("ADMIN")
                 .antMatchers(
