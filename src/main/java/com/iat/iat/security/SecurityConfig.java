@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
                 .antMatchers("/user/signUp").permitAll()
-                .antMatchers("/userData/checkContact/**").permitAll()
+                .antMatchers("/userData/**").permitAll()
                 .antMatchers("/transaction/saving/admin/**").hasRole("ADMIN")
                 .antMatchers(
                         HttpMethod.GET,
