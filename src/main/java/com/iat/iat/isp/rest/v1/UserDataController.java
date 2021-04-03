@@ -22,7 +22,7 @@ public class UserDataController {
 
     }
 
-    @GetMapping("/getByContact/{contact}")
+    @GetMapping("all/getByContact/{contact}")
     public ResponseEntity<UserDataDto> getUserData(@PathVariable String contact){
         return new ResponseEntity<>(userDataConverter.entityToDto(userDataService.getUserData(contact)), HttpStatus.OK);
     }
