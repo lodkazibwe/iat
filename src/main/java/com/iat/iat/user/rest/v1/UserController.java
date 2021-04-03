@@ -1,5 +1,6 @@
 package com.iat.iat.user.rest.v1;
 
+import com.iat.iat.security.AuthResponse;
 import com.iat.iat.security.MyUserDetailsService;
 import com.iat.iat.user.converter.UserConverter;
 import com.iat.iat.user.dto.UserDto;
@@ -18,8 +19,8 @@ public class UserController {
     @Autowired MyUserDetailsService myUserDetailsService;
 
     @PostMapping("/signUp")
-    public ResponseEntity<UserDto> signUp(@RequestBody UserDto userDto){
-        return new ResponseEntity<>(userConverter.entityToDto(userService.addUser(userDto)), HttpStatus.OK);
+    public ResponseEntity<AuthResponse> signUp(@RequestBody UserDto userDto){
+        return new ResponseEntity<>(userService.addUser(userDto), HttpStatus.OK);
 
     }
 
