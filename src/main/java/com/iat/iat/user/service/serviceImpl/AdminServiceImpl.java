@@ -60,7 +60,7 @@ public class AdminServiceImpl implements AdminService {
         AdminUserDto adminUserDto =new AdminUserDto();
         adminUserDto.setTittle("Super User");
         adminUserDto.setName("rootUser");
-        adminUserDto.setContact("0000");
+        adminUserDto.setContact("Admin");
         adminUserDto.setEmail("admin@iat.org");
         adminUserDto.setPassWord("123@abc");
 

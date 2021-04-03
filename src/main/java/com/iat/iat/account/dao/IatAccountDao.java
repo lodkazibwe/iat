@@ -7,4 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IatAccountDao extends JpaRepository<IatAccount, Integer> {
 
+    IatAccount findByContact(String contact);
+    boolean existsByContact(String contact);
+
 }

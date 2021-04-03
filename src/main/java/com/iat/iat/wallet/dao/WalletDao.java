@@ -13,5 +13,5 @@ public interface WalletDao extends JpaRepository<Wallet, Integer> {
     List<Wallet> findByBalance(double balance);
     List<Wallet> findByBalanceLessThan(double balance);
     List<Wallet> findByBalanceGreaterThan(double balance);
-
+    Wallet findByContact(String contact);
 }

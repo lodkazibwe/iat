@@ -19,7 +19,7 @@ public interface PaymentService {
     Payment updatePayment(PaymentDto paymentDto);
     void deletePayment(int id);
 
-    Payment buyIat(IatPackage iatPackage);
+    Payment buyIat(IatPackage iatPackage, String contact);
 
     Payment myLastPayment();
 }

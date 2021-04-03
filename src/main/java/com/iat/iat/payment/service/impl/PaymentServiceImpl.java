@@ -8,6 +8,7 @@ import com.iat.iat.exceptions.ResourceNotFoundException;
 import com.iat.iat.flutterWave.FlutterResp;
 import com.iat.iat.flutterWave.FlutterWaveService;
 import com.iat.iat.flutterWave.VerifyRespFW;
+import com.iat.iat.isp.service.UserDataService;
 import com.iat.iat.payment.converter.PaymentConverter;
 import com.iat.iat.payment.dao.PaymentDao;
 import com.iat.iat.payment.dto.PaymentDto;
@@ -38,6 +39,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired WalletService walletService;
     @Autowired DepositService depositService;
     @Autowired FlutterWaveService flutterWaveService;
+    @Autowired UserDataService userDataService;
     private final Logger logger = LoggerFactory.getLogger(PaymentServiceImpl.class);
     @Override
     public FlutterResp depositFW(double amount) {
@@ -164,7 +166,34 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public Payment buyIat(IatPackage iatPackage) {
-        return null;
+    @Transactional
+    public Payment buyIat(IatPackage iatPackage, String contact) {
+        //boolean bool =userDataService.existsByContact(contact);
+        //if(bool){ User user =myUserDetailsService.currentUser(); }
+        //throw new InvalidValuesException("invalid contact");
+        User user =myUserDetailsService.currentUser();
+        double iatPrice =gatIatPrice(iatPackage);
+        Wallet wallet =walletService.getByContact(user.getContact());
+        if(wallet.getBalance()>=iatPrice){
+            logger.info("transacting...");
+
+        }
+
+
+        return  null;
     }
+
+    private double gatIatPrice(IatPackage iatPackage) {
+        if(iatPackage.equals(IatPackage.DAILY)){
+            return 200;
+        }else if(iatPackage.equals(IatPackage.WEEKLY)){
+            return 1400;
+        }else if(iatPackage.equals(IatPackage.MONTHLY)){
+            return 6000;
+        } else if(iatPackage.equals(IatPackage.YEARLY)){
+            return 72000;
+        }
+        throw new InvalidValuesException("invalid option...");
+    }
+
 }

@@ -66,4 +66,9 @@ public class UserDataServiceImpl implements UserDataService {
         }
 
     }
+
+    @Override
+    public boolean existsByContact(String contact) {
+        return userDataDao.existsByContact(contact);
+    }
 }

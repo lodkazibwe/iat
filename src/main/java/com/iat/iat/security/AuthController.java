@@ -25,28 +25,13 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
+   @Autowired AuthService authService;
     private final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @PostMapping("get/token")
     public ResponseEntity<?> createAuthToken(@Valid @RequestBody AuthRequest authRequest){
 
-            try {
-                logger.info("authenticating....");
-                authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(authRequest.getUserName(), authRequest.getPassword())
-                );
-            } catch (Exception e) {
-                logger.info("invalid user name or pass....");
-                throw new InvalidValuesException("Incorrect name or password");
-
-            }
-            logger.info("getting user details....");
-            UserDetails userDetails = myUserDetailsService.loadUserByUsername(authRequest.getUserName());
-        logger.info("getting token....");
-
-            final String jwt = jwtUtil.generateToken(userDetails);
-            logger.info("authenticated....");
-            return new ResponseEntity<>(new AuthResponse(jwt), HttpStatus.OK);
+            return new ResponseEntity<>(new AuthResponse(authService.getJwt(authRequest)), HttpStatus.OK);
         }
 
 

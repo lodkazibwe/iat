@@ -1,6 +1,9 @@
 package com.iat.iat.user.service.serviceImpl;
 
 import com.iat.iat.exceptions.ResourceNotFoundException;
+import com.iat.iat.security.AuthRequest;
+import com.iat.iat.security.AuthResponse;
+import com.iat.iat.security.AuthService;
 import com.iat.iat.user.converter.UserConverter;
 import com.iat.iat.user.dao.UserDao;
 import com.iat.iat.user.dto.UserDto;
@@ -16,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -27,6 +31,7 @@ public class UserServiceImpl implements UserService {
     @Autowired PendingUserService pendingUserService;
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
+    @Autowired AuthService authService;
     private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
@@ -43,7 +48,8 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User addUser(UserDto createUserDto) {
+    @Transactional
+    public AuthResponse addUser(UserDto createUserDto) {
         logger.info("checking verification...");
         //boolean bool1 =pendingUserService.isVerified(createUserDto.getContact());
         logger.info("checking user...");
@@ -58,8 +64,11 @@ public class UserServiceImpl implements UserService {
         user.setRoles(getRoles());
         logger.info("saving user and creating wallet...");
         createWallet(userDao.save(user));
-        return user;
-
+        AuthRequest authRequest =new AuthRequest();
+        logger.info("generating auth key...");
+        authRequest.setUserName(createUserDto.getContact());
+        authRequest.setPassword(createUserDto.getPassWord());
+        return new AuthResponse(authService.getJwt(authRequest));
     }
 
     private void createWallet(User user) {
@@ -108,6 +117,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User updateUser(UserDto userDto) {
         logger.info("getting user by id...");
        User user =getUser(userDto.getId());

@@ -26,7 +26,7 @@ public class AdminUserConverter {
     public AdminUser dtoToEntity(AdminUserDto adminUserDto){
         AdminUser adminUser = new AdminUser();
         adminUser.setContact(adminUserDto.getContact());
-        adminUser.setName(adminUserDto.getName());
+        adminUser.setName(adminUserDto.getContact());
         adminUser.setEmail(adminUserDto.getEmail());
         adminUser.setTittle(adminUserDto.getTittle());
         adminUser.setPassword(passwordEncoder.encode(adminUserDto.getPassWord()));

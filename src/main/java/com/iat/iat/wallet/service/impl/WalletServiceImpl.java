@@ -105,6 +105,11 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
+    public Wallet getByContact(String contact) {
+        return walletDao.findByContact(contact);
+    }
+
+    @Override
     public Void deleteWallet(int id) {
         return null;
     }

@@ -12,4 +12,5 @@ public interface UserDataService {
     UserData getUserData(String contact);
     List<UserData> getData(String residence);
     ContactStatusDto isContactAvailable(String contact);
+    boolean existsByContact(String contact);
 }
