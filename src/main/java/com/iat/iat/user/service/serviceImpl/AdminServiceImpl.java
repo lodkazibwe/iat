@@ -93,6 +93,16 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public void addRole(String contact, String role) {
+        AdminUser adminUser =getAdmin(contact);
+        Set<Role> roles=adminUser.getRoles();
+        roles.add(new Role(role));
+        adminUser.setRoles(roles);
+        adminUserDao.save(adminUser);
+
+    }
+
+    @Override
     public AdminUser getAdmin(int id) {
         return adminUserDao.findById(id)
                 .orElseThrow(()->new ResourceNotFoundException("No such user With ID: " +id));

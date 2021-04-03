@@ -41,8 +41,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
                 .antMatchers("/user/signUp").permitAll()
-                .antMatchers("/userData/**").permitAll()
-                .antMatchers("/transaction/saving/admin/**").hasRole("ADMIN")
+                .antMatchers("/userData/all/**").permitAll()
+                .antMatchers("/userData/admin/**").hasRole("ADMIN")
+                .antMatchers("/userData/root/**").hasRole("ROOT")
+                .antMatchers("/payment/admin/**").hasRole("ADMIN")
+                .antMatchers("/payment/root/**").hasRole("ROOT")
+                .antMatchers("/adminUser/admin/**").hasRole("ADMIN")
+                .antMatchers("/adminUser/root/**").hasRole("ROOT")
+                .antMatchers("/user/admin/**").hasRole("ADMIN")
+                .antMatchers("/user/root/**").hasRole("ROOT")
+                .antMatchers("/wallet/admin/**").hasRole("ADMIN")
+                .antMatchers("/wallet/root/**").hasRole("ROOT")
                 .antMatchers(
                         HttpMethod.GET,
                         "/",

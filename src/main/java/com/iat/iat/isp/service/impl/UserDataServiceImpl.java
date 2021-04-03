@@ -4,6 +4,7 @@ import com.iat.iat.exceptions.InvalidValuesException;
 import com.iat.iat.exceptions.ResourceNotFoundException;
 import com.iat.iat.isp.converter.UserDataConverter;
 import com.iat.iat.isp.dao.UserDataDao;
+import com.iat.iat.isp.dto.ContactStatusDto;
 import com.iat.iat.isp.dto.UserDataDto;
 import com.iat.iat.isp.model.UserData;
 import com.iat.iat.isp.service.UserDataService;
@@ -52,14 +53,14 @@ public class UserDataServiceImpl implements UserDataService {
     }
 
     @Override
-    public String isContactAvailable(String contact) {
+    public ContactStatusDto isContactAvailable(String contact) {
         boolean bool =userService.userExists(contact);
         if(bool){
             throw new InvalidValuesException("account exists sign in");
         }else{
             boolean bool1 =userDataDao.existsByContact(contact);
             if(bool1){
-                return "Available";
+                return new ContactStatusDto(contact,"Available");
             }
             throw new ResourceNotFoundException("Invalid contact");
         }

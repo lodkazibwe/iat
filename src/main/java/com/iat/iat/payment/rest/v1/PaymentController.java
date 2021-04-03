@@ -27,7 +27,7 @@ public class PaymentController {
         return new ResponseEntity<>(paymentService.depositFW(amount), HttpStatus.OK);
     }
 
-    @PutMapping("/verify")
+    @PostMapping("/verify")
     public ResponseEntity<PaymentDto> verifyFW(@RequestParam int tx_ref, @RequestParam String transaction_id,
                                                @RequestParam String status ) throws JsonProcessingException {
         return new ResponseEntity<>(paymentConverter.entityToDto(paymentService.verifyFw(tx_ref,transaction_id,status)), HttpStatus.OK);

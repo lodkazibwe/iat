@@ -19,7 +19,7 @@ public class StartUp implements ApplicationListener<ApplicationReadyEvent> {
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
         boolean bool =depositService.existByMethod(PaymentMethod.FLUTTER_WAVE);
         if(bool){
-
+            adminService.addRole("0000", "ADMIN");
 
         }else{
             Deposit deposit= new Deposit();
@@ -27,6 +27,8 @@ public class StartUp implements ApplicationListener<ApplicationReadyEvent> {
             deposit.setPaymentMethod(PaymentMethod.FLUTTER_WAVE);
             depositService.addDeposit(deposit);
             adminService.addSuperUser();
+
+            //userService.addRole(contact,"ADMIN");
 
         }
 
