@@ -29,7 +29,7 @@ public class FlutterWaveService {
         payLoad.setCustomizations(new Customizations("IAT-Wallet","Deposit",""));
         payLoad.setMeta(new Meta(user.getId()));
         payLoad.setPaymentOptions("card");
-        payLoad.setRedirect_url("http://localhost:8080/payment/verify");
+        payLoad.setRedirect_url("http://iatnigeria.com:8087/payment/verify");
         payLoad.setTx_ref(tx_ref);
 
         logger.info("connecting to flutterWave service...");
