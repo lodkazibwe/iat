@@ -19,5 +19,6 @@ public interface WalletService {
     Wallet updateWallet(Payment payment);
     Wallet updateWallet(PaymentDto paymentDto);
 
+
     Void deleteWallet(int id);
 }

@@ -16,4 +16,5 @@ public class WalletDto {
     @NotNull (message ="balance cannot be null")
     private double balance;
     private int lastPayment;
+    private String contact;
 }

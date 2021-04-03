@@ -14,12 +14,14 @@ public class WalletConverter {
         walletDto.setBalance(wallet.getBalance());
         walletDto.setId(wallet.getId());
         walletDto.setUid(wallet.getUid());
+        walletDto.setContact(wallet.getContact());
         walletDto.setLastPayment(wallet.getLastPayment());
         return walletDto;
     }
 
     public Wallet dtoToEntity(WalletDto walletDto){
         Wallet wallet =new Wallet();
+        wallet.setContact(walletDto.getContact());
         wallet.setBalance(walletDto.getBalance());
         wallet.setUid(walletDto.getUid());
         return wallet;

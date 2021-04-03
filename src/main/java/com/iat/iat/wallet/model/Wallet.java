@@ -17,6 +17,7 @@ public class Wallet {
     @Id
     private int id;
     private int uid;
+    private String contact;
     private double balance;
     private int lastPayment;
 }

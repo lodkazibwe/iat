@@ -78,6 +78,7 @@ public class AdminServiceImpl implements AdminService {
         WalletDto walletDto =new WalletDto();
         walletDto.setUid(user.getId());
         walletDto.setBalance(0);
+        walletDto.setContact(user.getContact());
         logger.info("contacting wallet service...");
         walletService.create(walletDto);
     }

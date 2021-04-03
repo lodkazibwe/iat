@@ -11,6 +11,7 @@ import com.iat.iat.flutterWave.VerifyRespFW;
 import com.iat.iat.payment.converter.PaymentConverter;
 import com.iat.iat.payment.dao.PaymentDao;
 import com.iat.iat.payment.dto.PaymentDto;
+import com.iat.iat.payment.model.IatPackage;
 import com.iat.iat.payment.model.Payment;
 import com.iat.iat.payment.model.PaymentMethod;
 import com.iat.iat.payment.service.PaymentService;
@@ -160,5 +161,10 @@ public class PaymentServiceImpl implements PaymentService {
         Wallet wallet =walletService.getByUser(user.getId());
         logger.info("getting  payment...");
         return getById(wallet.getLastPayment());
+    }
+
+    @Override
+    public Payment buyIat(IatPackage iatPackage) {
+        return null;
     }
 }
