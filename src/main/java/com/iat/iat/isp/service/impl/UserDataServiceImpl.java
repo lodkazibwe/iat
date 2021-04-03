@@ -56,7 +56,7 @@ public class UserDataServiceImpl implements UserDataService {
     public ContactStatusDto isContactAvailable(String contact) {
         boolean bool =userService.userExists(contact);
         if(bool){
-            throw new InvalidValuesException("account exists sign in");
+            return new ContactStatusDto(contact,"Account Exists");
         }else{
             boolean bool1 =userDataDao.existsByContact(contact);
             if(bool1){
