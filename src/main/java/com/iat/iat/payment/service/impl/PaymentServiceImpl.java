@@ -12,8 +12,6 @@ import com.iat.iat.exceptions.ResourceNotFoundException;
 import com.iat.iat.flutterWave.FlutterResp;
 import com.iat.iat.flutterWave.FlutterWaveService;
 import com.iat.iat.flutterWave.VerifyRespFW;
-import com.iat.iat.isp.dto.ISPDto;
-import com.iat.iat.isp.model.ISP;
 import com.iat.iat.isp.service.UserDataService;
 import com.iat.iat.payment.converter.PaymentConverter;
 import com.iat.iat.payment.dao.PaymentDao;
@@ -29,7 +27,6 @@ import com.iat.iat.transaction.model.Transaction;
 import com.iat.iat.transaction.model.TransactionStatus;
 import com.iat.iat.transaction.service.TransactionService;
 import com.iat.iat.user.model.User;
-import com.iat.iat.wallet.dto.WalletDto;
 import com.iat.iat.wallet.model.Wallet;
 import com.iat.iat.wallet.service.WalletService;
 import org.slf4j.Logger;
@@ -58,6 +55,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired TransactionService transactionService;
     private final Logger logger = LoggerFactory.getLogger(PaymentServiceImpl.class);
     @Override
+    @Transactional
     public FlutterResp depositFW(double amount) {
 
         logger.info("Initiating payment...");

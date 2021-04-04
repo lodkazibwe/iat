@@ -57,6 +57,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    @Transactional
     public AdminUser addSuperUser() {
         logger.info("creating user...");
         AdminUserDto adminUserDto =new AdminUserDto();
@@ -96,6 +97,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    @Transactional
     public void addRole(String contact, String role) {
         AdminUser adminUser =getAdmin(contact);
         Set<Role> roles=adminUser.getRoles();

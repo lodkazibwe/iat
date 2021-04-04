@@ -6,19 +6,23 @@ import com.iat.iat.account.service.IatService;
 import com.iat.iat.exceptions.InvalidValuesException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class IatServiceImpl implements IatService {
     @Autowired IatDao iatDao;
+
     @Override
+    @Transactional
     public Iat addIatAccount(Iat iat1) {
         Iat iat =new Iat();
         iat.setAmount(0);
-        iat.setIsp(21);//(iat1.getIsp())
+        iat.setIsp(iat1.getIsp());
         return iatDao.save(iat);
     }
 
     @Override
+    @Transactional
     public Iat updateIat(Iat iatUpdate) {
         boolean bool =existsByIsp(iatUpdate.getIsp());
         if(bool){

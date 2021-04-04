@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class WalletServiceImpl implements WalletService {
     private final Logger logger = LoggerFactory.getLogger(WalletServiceImpl.class);
 
     @Override
+    @Transactional
     public Wallet create(WalletDto walletDto) {
         logger.info("converting...");
         Wallet wallet =walletConverter.dtoToEntity(walletDto);
@@ -73,6 +75,7 @@ public class WalletServiceImpl implements WalletService {
 
 
     @Override
+    @Transactional
     public Wallet updateWallet(WalletDto walletDto) {
         logger.info("getting wallet...");
         Wallet wallet =getById(walletDto.getId());
@@ -83,6 +86,7 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
+    @Transactional
     public Wallet updateWallet(Payment payment) {
         logger.info("getting wallet...");
         Wallet wallet =getById(payment.getWalletId());
@@ -95,6 +99,7 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
+    @Transactional
     public Wallet updateWallet(PaymentDto paymentDto) {
         logger.info("getting wallet...");
         Wallet wallet =getById(paymentDto.getWalletId());

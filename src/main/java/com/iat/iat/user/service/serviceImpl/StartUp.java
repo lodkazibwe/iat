@@ -27,7 +27,6 @@ public class StartUp implements ApplicationListener<ApplicationReadyEvent> {
 
         boolean bool =depositService.existByMethod(PaymentMethod.FLUTTER_WAVE);
         if(bool){
-            iatService.addIatAccount(new Iat());
             logger.info("system Started...");
 
         }else{

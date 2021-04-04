@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class CatServiceImpl implements CategoryService {
     private final Logger logger = LoggerFactory.getLogger(CatServiceImpl.class);
 
     @Override
+    @Transactional
     public Category addCat(CategoryDto categoryDto) {
         logger.info("converting...");
         Category category =categoryConverter.dtoToEntity(categoryDto);
@@ -39,6 +41,7 @@ public class CatServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public Category updateCat(CategoryDto categoryDto) {
         logger.info("getting category by id...");
         Category category= getCat(categoryDto.getId());
