@@ -26,6 +26,7 @@ public class FlutterWaveService {
         payLoad.setAmount(amount);
         payLoad.setCurrency("UGX");
         payLoad.setCustomer(new Customer(user.getEmail().replaceAll("\\s", ""), user.getContact(), user.getName()));
+
         payLoad.setCustomizations(new Customizations("IAT-Wallet","Deposit",""));
         payLoad.setMeta(new Meta(user.getId()));
         payLoad.setPaymentOptions("card");
@@ -43,9 +44,11 @@ public class FlutterWaveService {
         HttpStatus httpStatus = response.getStatusCode();
         if(httpStatus.equals(HttpStatus.OK)){
             logger.info("flutterWave service status..."+ httpStatus);
+            logger.info(user.getEmail().replaceAll("\\s", ""));
             return response.getBody();
         }
         logger.info("flutterWave service status..."+ httpStatus);
+
         throw new ResourceNotFoundException("external Service Error FW");
     }
 
