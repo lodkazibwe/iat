@@ -25,7 +25,7 @@ public class FlutterWaveService {
         PayLoad payLoad= new PayLoad();
         payLoad.setAmount(amount);
         payLoad.setCurrency("UGX");
-        payLoad.setCustomer(new Customer(user.getEmail(), user.getContact(), user.getName()));
+        payLoad.setCustomer(new Customer(user.getEmail().replaceAll("\\s", ""), user.getContact(), user.getName()));
         payLoad.setCustomizations(new Customizations("IAT-Wallet","Deposit",""));
         payLoad.setMeta(new Meta(user.getId()));
         payLoad.setPaymentOptions("card");
