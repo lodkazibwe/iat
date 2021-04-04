@@ -3,8 +3,14 @@ package com.iat.iat.account.service.Impl;
 import com.iat.iat.account.dao.IatAccountDao;
 import com.iat.iat.account.model.IatAccount;
 import com.iat.iat.account.service.IatAccountService;
+import com.iat.iat.exceptions.InvalidValuesException;
+import com.iat.iat.payment.model.IatPackage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Calendar;
+import java.util.Date;
 
 @Service
 public class IatAccountServiceImpl implements IatAccountService {
@@ -15,16 +21,44 @@ public class IatAccountServiceImpl implements IatAccountService {
     }
 
     @Override
-    public IatAccount updateAccount(IatAccount iatAccount) {
+    @Transactional
+    public IatAccount updateAccount(IatAccount iatAccount, IatPackage iatPackage) {
         boolean bool =existsByContact(iatAccount.getContact());
         if(bool){
             IatAccount iatAccount1= getAccount(iatAccount.getContact());
             iatAccount1.setLastTransaction(iatAccount.getLastTransaction());
-            iatAccount1.setExpireAt(iatAccount.getExpireAt());
+            if(iatAccount1.getExpireAt().before(new Date())){
+                iatAccount1.setExpireAt(iatAccount.getExpireAt());
+                return iatAccountDao.save(iatAccount1);
+            }
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(iatAccount1.getExpireAt());
+            iatAccount1.setExpireAt(getNewExpiry(cal, iatPackage));
+
             return iatAccountDao.save(iatAccount1);
         }
        return  addAccount(iatAccount);
     }
+
+    private Date getNewExpiry(Calendar cal, IatPackage iatPackage) {
+        if(iatPackage.equals(IatPackage.DAILY)){
+            cal.add(Calendar.DAY_OF_MONTH,1);
+            return cal.getTime();
+
+        }else if(iatPackage.equals(IatPackage.WEEKLY)){
+            cal.add(Calendar.WEEK_OF_MONTH,1);
+            return cal.getTime();
+        }else if(iatPackage.equals(IatPackage.MONTHLY)){
+            cal.add(Calendar.MONTH,1);
+            return cal.getTime();
+        }else if(iatPackage.equals(IatPackage.YEARLY)){
+            cal.add(Calendar.YEAR, 1);
+            return cal.getTime();
+        }
+
+        throw new InvalidValuesException("invalid option");
+    }
+
 
     @Override
     public IatAccount getAccount(String contact) {

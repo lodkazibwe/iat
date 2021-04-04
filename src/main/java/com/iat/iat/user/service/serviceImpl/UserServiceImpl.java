@@ -1,6 +1,8 @@
 package com.iat.iat.user.service.serviceImpl;
 
 import com.iat.iat.exceptions.ResourceNotFoundException;
+import com.iat.iat.isp.model.UserData;
+import com.iat.iat.isp.service.UserDataService;
 import com.iat.iat.security.AuthRequest;
 import com.iat.iat.security.AuthResponse;
 import com.iat.iat.security.AuthService;
@@ -32,6 +34,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
     @Autowired AuthService authService;
+    @Autowired UserDataService userDataService;
     private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
@@ -50,8 +53,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public AuthResponse addUser(UserDto createUserDto) {
-        logger.info("checking verification...");
+        logger.info("checking user data...");
         //boolean bool1 =pendingUserService.isVerified(createUserDto.getContact());
+        //boolean bool2 =userDataService.existsByContact(createUserDto.getContact());
         logger.info("checking user...");
         boolean bool =userExists(createUserDto.getContact());
         if(bool){

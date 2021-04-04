@@ -3,7 +3,6 @@ package com.iat.iat.transaction.converter;
 import com.iat.iat.isp.converter.ISPConverter;
 import com.iat.iat.transaction.dto.TransactionDto;
 import com.iat.iat.transaction.model.Transaction;
-import com.iat.iat.transaction.model.TransactionStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +17,7 @@ public class TransactionConverter {
         TransactionDto transactionDto =new TransactionDto();
         transactionDto.setId(transaction.getId());
         transactionDto.setAmount(transaction.getAmount());
-        transactionDto.setIspDto(ispConverter.entityToDto(transaction.getIsp()));
+        transactionDto.setIsp(transaction.getIsp());
         transactionDto.setPaidBy(transaction.getPaidBy());
         transactionDto.setPaidFor(transaction.getPaidFor());
         transactionDto.setUserId(transaction.getUserId());
@@ -31,11 +30,11 @@ public class TransactionConverter {
     public Transaction dtoToEntity(TransactionDto transactionDto){
         Transaction transaction = new Transaction();
         transaction.setAmount(transactionDto.getAmount());
-        transaction.setIsp(ispConverter.dtoToEntity(transactionDto.getIspDto()));
+        transaction.setIsp(transactionDto.getIsp());
         transaction.setPaidBy(transactionDto.getPaidBy());
         transaction.setUserId(transactionDto.getUserId());
         transaction.setPaidFor(transactionDto.getPaidFor());
-        transaction.setStatus(TransactionStatus.PENDING);
+        transaction.setStatus(transactionDto.getStatus());
         transaction.setCreationDateTime(new Date());
         transaction.setTransactionDate(new Date());
         return transaction;

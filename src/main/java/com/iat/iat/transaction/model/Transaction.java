@@ -29,8 +29,6 @@ public class Transaction {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDateTime;
-    @ManyToOne
-    @JoinColumn()
-    private ISP isp;
+    private int isp;
 
 }

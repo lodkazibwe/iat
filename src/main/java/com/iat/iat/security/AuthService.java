@@ -1,6 +1,7 @@
 package com.iat.iat.security;
 
 import com.iat.iat.exceptions.InvalidValuesException;
+import com.iat.iat.user.converter.UserConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ public class AuthService {
     MyUserDetailsService myUserDetailsService;
     @Autowired
     private JwtUtil jwtUtil;
+    @Autowired UserConverter userConverter;
     private final Logger logger = LoggerFactory.getLogger(AuthController.class);
     public String getJwt(AuthRequest authRequest){
         try {
@@ -35,6 +37,13 @@ public class AuthService {
         logger.info("authenticated....");
        return jwtUtil.generateToken(userDetails);
 
+
+    }
+
+    public AuthResponseV2 authenticate(AuthRequest authRequest){
+        return new AuthResponseV2(
+           getJwt(authRequest), userConverter.entityToDto(myUserDetailsService.getUser(authRequest.getUserName()))
+        );
 
     }
 

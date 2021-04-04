@@ -20,7 +20,7 @@ public class TransactionDto {
     @NotNull(message ="user cannot be null")
     private int userId;
     @NotNull (message ="isp cannot be null")
-    private ISPDto ispDto;
+    private int isp;
     @NotNull (message ="paidBy cannot be null")
     private String paidBy;
     @NotNull (message ="paidFor cannot be null")

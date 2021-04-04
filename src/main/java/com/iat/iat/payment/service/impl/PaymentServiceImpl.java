@@ -2,22 +2,34 @@ package com.iat.iat.payment.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.iat.iat.account.model.Deposit;
+import com.iat.iat.account.model.Iat;
+import com.iat.iat.account.model.IatAccount;
 import com.iat.iat.account.service.DepositService;
+import com.iat.iat.account.service.IatAccountService;
+import com.iat.iat.account.service.IatService;
 import com.iat.iat.exceptions.InvalidValuesException;
 import com.iat.iat.exceptions.ResourceNotFoundException;
 import com.iat.iat.flutterWave.FlutterResp;
 import com.iat.iat.flutterWave.FlutterWaveService;
 import com.iat.iat.flutterWave.VerifyRespFW;
+import com.iat.iat.isp.dto.ISPDto;
+import com.iat.iat.isp.model.ISP;
 import com.iat.iat.isp.service.UserDataService;
 import com.iat.iat.payment.converter.PaymentConverter;
 import com.iat.iat.payment.dao.PaymentDao;
+import com.iat.iat.payment.dto.BuyIatDto;
 import com.iat.iat.payment.dto.PaymentDto;
 import com.iat.iat.payment.model.IatPackage;
 import com.iat.iat.payment.model.Payment;
 import com.iat.iat.payment.model.PaymentMethod;
 import com.iat.iat.payment.service.PaymentService;
 import com.iat.iat.security.MyUserDetailsService;
+import com.iat.iat.transaction.dto.TransactionDto;
+import com.iat.iat.transaction.model.Transaction;
+import com.iat.iat.transaction.model.TransactionStatus;
+import com.iat.iat.transaction.service.TransactionService;
 import com.iat.iat.user.model.User;
+import com.iat.iat.wallet.dto.WalletDto;
 import com.iat.iat.wallet.model.Wallet;
 import com.iat.iat.wallet.service.WalletService;
 import org.slf4j.Logger;
@@ -26,6 +38,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -40,6 +53,9 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired DepositService depositService;
     @Autowired FlutterWaveService flutterWaveService;
     @Autowired UserDataService userDataService;
+    @Autowired IatService iatService;
+    @Autowired IatAccountService iatAccountService;
+    @Autowired TransactionService transactionService;
     private final Logger logger = LoggerFactory.getLogger(PaymentServiceImpl.class);
     @Override
     public FlutterResp depositFW(double amount) {
@@ -167,20 +183,100 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional
-    public Payment buyIat(IatPackage iatPackage, String contact) {
+    public Payment buyIat(BuyIatDto buyIatDto) {
         //boolean bool =userDataService.existsByContact(contact);
         //if(bool){ User user =myUserDetailsService.currentUser(); }
         //throw new InvalidValuesException("invalid contact");
+
+
+        logger.info("getting current user...");
         User user =myUserDetailsService.currentUser();
-        double iatPrice =gatIatPrice(iatPackage);
+        logger.info("getting package price...");
+        double iatPrice =gatIatPrice(buyIatDto.getIatPackage());
+        logger.info("getting user wallet...");
         Wallet wallet =walletService.getByContact(user.getContact());
         if(wallet.getBalance()>=iatPrice){
+            logger.info("tax account gen...");
+            Date expireD= getExpireAt(buyIatDto.getIatPackage());
+            IatAccount iatAccount =new IatAccount();
+            iatAccount.setExpireAt(expireD);
+            iatAccount.setLastTransaction(1);
+            iatAccount.setContact(buyIatDto.getContact());
             logger.info("transacting...");
-
+            TransactionDto transactionDto =generateTrans(buyIatDto.getIsp(), iatPrice,buyIatDto.getContact(), user.getContact());
+            logger.info("saving transaction...");
+            Transaction transaction=transactionService.addNew(transactionDto);
+            Payment payment =generatePayment(buyIatDto.getContact(), wallet.getId(), transaction.getId(), iatPrice);
+            logger.info("updating iat...");
+            iatService.updateIat(new Iat(1,buyIatDto.getIsp(),iatPrice));
+            logger.info("updating tax account...");
+            iatAccountService.updateAccount(iatAccount, buyIatDto.getIatPackage());
+            logger.info("saving payment...");
+            logger.info("updating wallet...");
+            walletService.updateWallet(paymentDao.save(payment));
+            return payment;
         }
 
+        throw new InvalidValuesException("insufficient balance");
+    }
 
-        return  null;
+    private Payment generatePayment(String contact, int wId, int tId, double amount) {
+        Payment payment= new Payment();
+        payment.setWalletId(wId);
+        payment.setExternalId(""+tId);
+        payment.setRef(contact);
+        payment.setPaymentType("wallet");
+        payment.setMessage("paid iat: "+contact);
+        payment.setStatus("success");
+        payment.setPaymentDate(new Date());
+        payment.setCreationDateTime(new Date());
+        payment.setAmount(amount*-1);
+        payment.setPaymentMethod(PaymentMethod.WALLET);
+        return  payment;
+    }
+
+    private TransactionDto generateTrans(int isp, double amount, String fr, String by) {
+        TransactionDto transaction = new TransactionDto();
+        transaction.setTransactionDate(new Date());
+        transaction.setCreationDateTime(new Date());
+        transaction.setStatus(TransactionStatus.PENDING);
+        transaction.setIsp(isp);
+        transaction.setUserId(1);
+        transaction.setPaidFor(fr);
+        transaction.setPaidBy(by);
+        transaction.setAmount(amount);
+        logger.info("contacting isp");
+        boolean bool=sendToIsp(isp, amount, fr);
+        if(bool){
+            transaction.setStatus(TransactionStatus.SUCCESS);
+        }
+        return transaction;
+    }
+
+    private boolean sendToIsp(int isp, double amount, String contact) {
+        return  true;
+    }
+
+    private Date getExpireAt(IatPackage iatPackage){
+        if(iatPackage.equals(IatPackage.DAILY)){
+            Calendar cal=Calendar.getInstance();
+            cal.add(Calendar.DAY_OF_MONTH,1);
+            return cal.getTime();
+
+        }else if(iatPackage.equals(IatPackage.WEEKLY)){
+            Calendar cal=Calendar.getInstance();
+            cal.add(Calendar.WEEK_OF_MONTH,1);
+            return cal.getTime();
+        }else if(iatPackage.equals(IatPackage.MONTHLY)){
+            Calendar cal=Calendar.getInstance();
+            cal.add(Calendar.MONTH,1);
+            return cal.getTime();
+        }else if(iatPackage.equals(IatPackage.YEARLY)){
+            Calendar cal=Calendar.getInstance();
+            cal.add(Calendar.YEAR, 1);
+            return cal.getTime();
+        }
+        throw new InvalidValuesException("invalid option");
     }
 
     private double gatIatPrice(IatPackage iatPackage) {

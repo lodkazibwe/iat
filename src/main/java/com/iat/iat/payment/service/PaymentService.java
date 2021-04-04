@@ -2,6 +2,9 @@ package com.iat.iat.payment.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.iat.iat.flutterWave.FlutterResp;
+import com.iat.iat.isp.dto.ISPDto;
+import com.iat.iat.isp.model.ISP;
+import com.iat.iat.payment.dto.BuyIatDto;
 import com.iat.iat.payment.dto.PaymentDto;
 import com.iat.iat.payment.model.IatPackage;
 import com.iat.iat.payment.model.Payment;
@@ -19,7 +22,7 @@ public interface PaymentService {
     Payment updatePayment(PaymentDto paymentDto);
     void deletePayment(int id);
 
-    Payment buyIat(IatPackage iatPackage, String contact);
+    Payment buyIat(BuyIatDto buyIatDto);
 
     Payment myLastPayment();
 }

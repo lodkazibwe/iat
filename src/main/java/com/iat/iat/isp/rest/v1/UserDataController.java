@@ -37,4 +37,5 @@ public class UserDataController {
         return new ResponseEntity<>(userDataService.isContactAvailable(contact), HttpStatus.OK);
     }
 
+
 }
