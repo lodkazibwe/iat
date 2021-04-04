@@ -9,4 +9,6 @@ public interface IatDao extends JpaRepository<Iat, Integer> {
 
     Iat findByIsp(int isp);
 
+    boolean existsByIsp(int isp);
+
 }

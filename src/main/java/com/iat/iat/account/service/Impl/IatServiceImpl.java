@@ -1,9 +1,9 @@
 package com.iat.iat.account.service.Impl;
 
 import com.iat.iat.account.dao.IatDao;
-import com.iat.iat.account.model.Deposit;
 import com.iat.iat.account.model.Iat;
 import com.iat.iat.account.service.IatService;
+import com.iat.iat.exceptions.InvalidValuesException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,14 +12,21 @@ public class IatServiceImpl implements IatService {
     @Autowired IatDao iatDao;
     @Override
     public Iat addIatAccount(Iat iat1) {
-        Iat iat =findByIsp(iat1.getIsp());
-        iat.setAmount(iat.getAmount()+iat1.getAmount());
+        Iat iat =new Iat();
+        iat.setAmount(0);
+        iat.setIsp(21);//(iat1.getIsp())
         return iatDao.save(iat);
     }
 
     @Override
-    public Iat updateIat(Iat iat) {
-        return null;
+    public Iat updateIat(Iat iatUpdate) {
+        boolean bool =existsByIsp(iatUpdate.getIsp());
+        if(bool){
+        Iat iat =findByIsp(iatUpdate.getIsp());
+        iat.setAmount(iat.getAmount()+iatUpdate.getAmount());
+        return iatDao.save(iat);
+        }
+        throw new InvalidValuesException("invalid Iat account");
     }
 
     @Override
@@ -30,5 +37,9 @@ public class IatServiceImpl implements IatService {
     @Override
     public Iat findByIsp(int isp) {
         return iatDao.findByIsp(isp);
+    }
+
+    public boolean existsByIsp(int isp){
+        return iatDao.existsByIsp(isp);
     }
 }
