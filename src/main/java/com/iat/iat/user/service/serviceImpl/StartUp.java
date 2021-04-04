@@ -20,7 +20,7 @@ public class StartUp implements ApplicationListener<ApplicationReadyEvent> {
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
         boolean bool =depositService.existByMethod(PaymentMethod.FLUTTER_WAVE);
         if(bool){
-            ispService.addIsp(new ISPDto(1,"MTN", "example.com"));
+            //ispService.addIsp(new ISPDto(1,"MTN", "example.com"));
 
         }else{
             Deposit deposit= new Deposit();
