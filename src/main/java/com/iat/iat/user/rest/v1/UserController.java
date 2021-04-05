@@ -3,6 +3,7 @@ package com.iat.iat.user.rest.v1;
 import com.iat.iat.security.AuthResponse;
 import com.iat.iat.security.MyUserDetailsService;
 import com.iat.iat.user.converter.UserConverter;
+import com.iat.iat.user.dto.ChangePassDto;
 import com.iat.iat.user.dto.UserDto;
 import com.iat.iat.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +11,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    @Autowired UserService userService;
+    @Autowired
+    UserService userService;
     @Autowired UserConverter userConverter;
     @Autowired MyUserDetailsService myUserDetailsService;
 
@@ -29,9 +33,9 @@ public class UserController {
         return new ResponseEntity<>(userConverter.entityToDto(myUserDetailsService.currentUser()), HttpStatus.OK);
     }
 
-    @PutMapping("/changePass/{pass}")
-    public ResponseEntity<UserDto> changePassword(@PathVariable String pass){
-        return new ResponseEntity<>(userConverter.entityToDto(userService.changePassword(pass)), HttpStatus.OK);
+    @PutMapping("/changePass")
+    public ResponseEntity<UserDto> changePassword(@Valid @RequestBody ChangePassDto changePassDto){
+        return new ResponseEntity<>(userConverter.entityToDto(userService.changePassword(changePassDto)), HttpStatus.OK);
 
     }
 

@@ -2,6 +2,7 @@ package com.iat.iat.user.rest.v1;
 
 import com.iat.iat.user.converter.AdminUserConverter;
 import com.iat.iat.user.dto.AdminUserDto;
+import com.iat.iat.user.dto.ChangePassDto;
 import com.iat.iat.user.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,9 +41,9 @@ public class AdminUserController {
         return new ResponseEntity<>(adminUserConverter.entityToDto(adminService.getAll()), HttpStatus.OK);
     }
 
-    @PutMapping("/admin/changePass/{pass}")
-    public ResponseEntity<AdminUserDto> changePassword(@PathVariable String pass){
-        return new ResponseEntity<>(adminUserConverter.entityToDto(adminService.changePassword(pass)), HttpStatus.OK);
+    @PutMapping("/admin/changePass")
+    public ResponseEntity<AdminUserDto> changePassword(@Valid @RequestBody ChangePassDto changePassDto){
+        return new ResponseEntity<>(adminUserConverter.entityToDto(adminService.changePassword(changePassDto)), HttpStatus.OK);
 
     }
 

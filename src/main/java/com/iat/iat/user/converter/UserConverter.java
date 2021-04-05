@@ -27,7 +27,7 @@ public class UserConverter {
     public User dtoToEntity(UserDto userDto){
         User user = new User();
         user.setContact(userDto.getContact());
-        user.setName(userDto.getContact());
+        user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
         user.setPassword(passwordEncoder.encode(userDto.getPassWord()));
         return user;

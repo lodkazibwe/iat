@@ -20,7 +20,7 @@ import java.util.Random;
 public class PendingUserServiceImpl implements PendingUserService {
 
     @Autowired PendingUserDao pendingUserDao;
-    //@Autowired UserService userService;
+    //@Autowired UserService1 userService;
     private final Logger logger = LoggerFactory.getLogger(PendingUserServiceImpl.class);
     @Override
     public PendingUser addNew(String contact) {

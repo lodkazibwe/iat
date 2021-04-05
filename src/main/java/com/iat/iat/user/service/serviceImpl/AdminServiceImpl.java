@@ -1,10 +1,12 @@
 package com.iat.iat.user.service.serviceImpl;
 
+import com.iat.iat.exceptions.InvalidValuesException;
 import com.iat.iat.exceptions.ResourceNotFoundException;
 import com.iat.iat.security.MyUserDetailsService;
 import com.iat.iat.user.converter.AdminUserConverter;
 import com.iat.iat.user.dao.AdminUserDao;
 import com.iat.iat.user.dto.AdminUserDto;
+import com.iat.iat.user.dto.ChangePassDto;
 import com.iat.iat.user.model.AdminUser;
 import com.iat.iat.user.model.Role;
 import com.iat.iat.user.model.User;
@@ -155,10 +157,17 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public AdminUser changePassword(String password) {
+    public AdminUser changePassword(ChangePassDto changePassDto) {
         User user= myUserDetailsService.currentUser();
+        if(changePassDto.getNewPass().equals(changePassDto.getConfirm())){
+        if(user.getPassword().equals(passwordEncoder.encode(changePassDto.getOldPass()))){
         AdminUser adminUser=getAdmin(user.getId());
-        adminUser.setPassword(passwordEncoder.encode(password));
-        return adminUserDao.save(adminUser);
+                    adminUser.setPassword(passwordEncoder.encode(changePassDto.getNewPass()));
+                    return adminUserDao.save(adminUser);
+    }
+                   throw new InvalidValuesException("invalid user");
+              }
+             throw new InvalidValuesException("password mismatch");
+
     }
 }

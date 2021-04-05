@@ -1,7 +1,7 @@
 package com.iat.iat.user.service;
 
-
 import com.iat.iat.security.AuthResponse;
+import com.iat.iat.user.dto.ChangePassDto;
 import com.iat.iat.user.dto.UserDto;
 import com.iat.iat.user.model.PendingUser;
 import com.iat.iat.user.model.User;
@@ -18,6 +18,5 @@ public interface UserService {
     User updateUser(UserDto userDto);
     Void DeleteUser(int id);
     boolean userExists(String contact);
-    User changePassword(String password);
-
+    User changePassword(ChangePassDto changePassDto);
 }

@@ -1,6 +1,7 @@
 package com.iat.iat.user.service;
 
 import com.iat.iat.user.dto.AdminUserDto;
+import com.iat.iat.user.dto.ChangePassDto;
 import com.iat.iat.user.dto.UserDto;
 import com.iat.iat.user.model.AdminUser;
 import com.iat.iat.user.model.User;
@@ -18,5 +19,5 @@ public interface AdminService {
     AdminUser updateAdmin(AdminUserDto adminUserDto);
     Void DeleteAdmin(int id);
     void addRole(String contact, String role);
-    AdminUser changePassword(String password);
+    AdminUser changePassword(ChangePassDto changePassDto);
 }

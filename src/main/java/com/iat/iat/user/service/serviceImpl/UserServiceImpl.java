@@ -2,7 +2,6 @@ package com.iat.iat.user.service.serviceImpl;
 
 import com.iat.iat.exceptions.InvalidValuesException;
 import com.iat.iat.exceptions.ResourceNotFoundException;
-import com.iat.iat.isp.model.UserData;
 import com.iat.iat.isp.service.UserDataService;
 import com.iat.iat.security.AuthRequest;
 import com.iat.iat.security.AuthResponse;
@@ -10,6 +9,7 @@ import com.iat.iat.security.AuthService;
 import com.iat.iat.security.MyUserDetailsService;
 import com.iat.iat.user.converter.UserConverter;
 import com.iat.iat.user.dao.UserDao;
+import com.iat.iat.user.dto.ChangePassDto;
 import com.iat.iat.user.dto.UserDto;
 import com.iat.iat.user.model.PendingUser;
 import com.iat.iat.user.model.Role;
@@ -140,12 +140,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User changePassword(String password) {
+    public User changePassword(ChangePassDto changePassDto) {
         User user= myUserDetailsService.currentUser();
-        if(user.getRoles().contains("USER")){
-            user.setPassword(passwordEncoder.encode(password));
-            return userDao.save(user);
+        if(changePassDto.getNewPass().equals(changePassDto.getConfirm())){
+            if(user.getPassword().equals(passwordEncoder.encode(changePassDto.getOldPass()))){
+                user.setPassword(passwordEncoder.encode(changePassDto.getNewPass()));
+                return userDao.save(user);
+            }
+            throw new InvalidValuesException("invalid user");
         }
-        throw new InvalidValuesException("invalid user");
+        throw new InvalidValuesException("password mismatch");
+
     }
 }

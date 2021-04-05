@@ -20,7 +20,8 @@ public class UserDataServiceImpl implements UserDataService {
    @Autowired
    UserDataDao userDataDao;
    @Autowired UserDataConverter userDataConverter;
-   @Autowired UserService userService;
+   @Autowired
+   UserService userService;
     private final Logger logger = LoggerFactory.getLogger(UserDataServiceImpl.class);
 
     @Override
