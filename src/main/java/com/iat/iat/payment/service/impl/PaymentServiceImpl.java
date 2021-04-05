@@ -319,7 +319,7 @@ public class PaymentServiceImpl implements PaymentService {
         User user=myUserDetailsService.currentUser();
         logger.info("getting  user wallet...");
         Wallet wallet =walletService.getByUser(user.getId());
-        if(wallet.getBalance()<amount) {
+        if(wallet.getBalance()>amount) {
             logger.info("getting  receiver wallet...");
             Wallet rWallet = walletService.getByContact(contact);
             logger.info("transacting...");
