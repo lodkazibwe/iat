@@ -24,12 +24,12 @@ public class IspController {
         return new ResponseEntity<>(ispConverter.entityToDto(ispService.addIsp(ispDto)), HttpStatus.OK);
     }
 
-    /*@GetMapping("/getAll")
+    @GetMapping("/getAll")
     public ResponseEntity<List<ISPDto>> getAll(){
         return new ResponseEntity<>(ispConverter.entityToDto(ispService.getAll()), HttpStatus.OK);
-    }*/
+    }
 
-    @GetMapping("/getAll")
+    @GetMapping("/get/All")
     public ResponseEntity<IspList> getAllList(){
         IspList ispList =new IspList(ispConverter.entityToDto(ispService.getAll()));
         return new ResponseEntity<>(ispList, HttpStatus.OK);
