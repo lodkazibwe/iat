@@ -14,6 +14,7 @@ public interface WalletService {
     Wallet getByUser(int userId);
     Wallet getByContact(String contact);
     List<Wallet> getByBalance(double balance);
+    List<Wallet> getAll();
     List<Wallet> getByBalanceLess(double balance);
     List<Wallet> getByBalanceGreater(double balance);
     Wallet updateWallet(WalletDto walletDto);

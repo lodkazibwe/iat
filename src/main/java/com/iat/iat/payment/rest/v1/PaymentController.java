@@ -31,8 +31,8 @@ public class PaymentController {
     }
 
 
-    @PostMapping("/verify")
-    public ResponseEntity<PaymentDto> verifyFW(@RequestParam int tx_ref, @RequestParam String transaction_id,
+    @GetMapping("/verify")
+    public ResponseEntity<PaymentDto> verifyFW(@RequestParam int tx_ref, @RequestParam(required = false) String transaction_id,
                                                @RequestParam String status ) throws JsonProcessingException {
         return new ResponseEntity<>(paymentConverter.entityToDto(paymentService.verifyFw(tx_ref,transaction_id,status)), HttpStatus.OK);
     }
@@ -48,7 +48,11 @@ public class PaymentController {
         return new ResponseEntity<>(paymentConverter.entityToDto(paymentService.buyIat(buyIatDto)), HttpStatus.OK);
     }
 
+    @GetMapping("/admin/getByWallet/{walletId}")
+    public ResponseEntity<List<PaymentDto>> getByWallet(@PathVariable int walletId){
+        return new ResponseEntity<>(paymentConverter.entityToDto(paymentService.getByWallet(walletId)), HttpStatus.OK);
 
+    }
 
 
 

@@ -56,6 +56,11 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
+    public List<Wallet> getAll() {
+        return walletDao.findAll();
+    }
+
+    @Override
     public List<Wallet> getByBalance(double balance) {
 
         return walletDao.findByBalance(balance);

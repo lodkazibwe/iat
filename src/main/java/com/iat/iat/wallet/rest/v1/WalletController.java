@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/wallet")
@@ -25,6 +27,11 @@ public class WalletController {
     @GetMapping("/myWallet")
     public ResponseEntity<WalletDto> myWallet(){
         return new ResponseEntity<>(walletConverter.entityToDto(walletService.myWallet()), HttpStatus.OK);
+    }
+
+    @GetMapping("/admin/getAll")
+    public ResponseEntity<List<WalletDto>> getAll(){
+        return new ResponseEntity<>(walletConverter.entityToDto(walletService.getAll()), HttpStatus.OK);
     }
 
 
