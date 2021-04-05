@@ -2,6 +2,7 @@ package com.iat.iat.isp.rest.v1;
 
 import com.iat.iat.isp.converter.ISPConverter;
 import com.iat.iat.isp.dto.ISPDto;
+import com.iat.iat.isp.dto.IspList;
 import com.iat.iat.isp.service.ISPService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,9 +24,15 @@ public class IspController {
         return new ResponseEntity<>(ispConverter.entityToDto(ispService.addIsp(ispDto)), HttpStatus.OK);
     }
 
-    @GetMapping("/getAll")
+    /*@GetMapping("/getAll")
     public ResponseEntity<List<ISPDto>> getAll(){
         return new ResponseEntity<>(ispConverter.entityToDto(ispService.getAll()), HttpStatus.OK);
+    }*/
+
+    @GetMapping("/getAll")
+    public ResponseEntity<IspList> getAllList(){
+        IspList ispList =new IspList(ispConverter.entityToDto(ispService.getAll()));
+        return new ResponseEntity<>(ispList, HttpStatus.OK);
     }
 
 
