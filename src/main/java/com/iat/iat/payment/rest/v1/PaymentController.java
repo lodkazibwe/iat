@@ -1,20 +1,16 @@
 package com.iat.iat.payment.rest.v1;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.iat.iat.flutterWave.FlutterResp;
-import com.iat.iat.isp.dto.ISPDto;
 import com.iat.iat.payment.converter.PaymentConverter;
 import com.iat.iat.payment.dto.BuyIatDto;
 import com.iat.iat.payment.dto.PaymentDto;
-import com.iat.iat.payment.model.IatPackage;
 import com.iat.iat.payment.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
@@ -32,9 +28,9 @@ public class PaymentController {
 
 
     @GetMapping("/verify")
-    public ResponseEntity<PaymentDto> verifyFW(@RequestParam int tx_ref, @RequestParam(required = false) String transaction_id,
+    public ResponseEntity<String> verifyFW(@RequestParam int tx_ref, @RequestParam(required = false) String transaction_id,
                                                @RequestParam String status ) throws JsonProcessingException {
-        return new ResponseEntity<>(paymentConverter.entityToDto(paymentService.verifyFw(tx_ref,transaction_id,status)), HttpStatus.OK);
+        return new ResponseEntity<>(paymentService.verifyFw(tx_ref,transaction_id,status), HttpStatus.OK);
     }
 
     @GetMapping("/myLastPayment")
@@ -48,9 +44,26 @@ public class PaymentController {
         return new ResponseEntity<>(paymentConverter.entityToDto(paymentService.buyIat(buyIatDto)), HttpStatus.OK);
     }
 
-    @GetMapping("/admin/getByWallet/{walletId}")
+    @PutMapping("/transfer/{amount}/{contact}")
+    public ResponseEntity<PaymentDto> transferToAnotherWallet(@PathVariable double amount, @PathVariable String contact){
+        return new ResponseEntity<>(paymentConverter.entityToDto(paymentService.transfer(amount, contact)), HttpStatus.OK);
+    }
+
+
+    @GetMapping("/myLastPayments")
+    public ResponseEntity<List<PaymentDto>> last5Payments(){
+        return new ResponseEntity<>(paymentConverter.entityToDto(paymentService.myLastFive()), HttpStatus.OK);
+
+    }
+    @GetMapping("/admin/allByWallet/{walletId}")
     public ResponseEntity<List<PaymentDto>> getByWallet(@PathVariable int walletId){
-        return new ResponseEntity<>(paymentConverter.entityToDto(paymentService.getByWallet(walletId)), HttpStatus.OK);
+        return new ResponseEntity<>(paymentConverter.entityToDto(paymentService.allByWallet(walletId)), HttpStatus.OK);
+
+    }
+
+    @GetMapping("/admin/getByWallet/{walletId}")
+    public ResponseEntity<List<PaymentDto>> lastFifty(@PathVariable int walletId){
+        return new ResponseEntity<>(paymentConverter.entityToDto(paymentService.lastFifty(walletId)), HttpStatus.OK);
 
     }
 

@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin
@@ -19,7 +20,7 @@ public class AdminUserController {
     @Autowired AdminService adminService;
 
     @PostMapping("/root/add")
-    public ResponseEntity<AdminUserDto> addAdmin(@RequestBody AdminUserDto adminUserDto){
+    public ResponseEntity<AdminUserDto> addAdmin(@Valid @RequestBody AdminUserDto adminUserDto){
         return new ResponseEntity<>(adminUserConverter.entityToDto(adminService.addAdmin(adminUserDto)), HttpStatus.OK);
 
     }
@@ -38,5 +39,12 @@ public class AdminUserController {
     public ResponseEntity<List<AdminUserDto>> getAll(){
         return new ResponseEntity<>(adminUserConverter.entityToDto(adminService.getAll()), HttpStatus.OK);
     }
+
+    @PutMapping("/admin/changePass/{pass}")
+    public ResponseEntity<AdminUserDto> changePassword(@PathVariable String pass){
+        return new ResponseEntity<>(adminUserConverter.entityToDto(adminService.changePassword(pass)), HttpStatus.OK);
+
+    }
+
 
      }

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class WalletServiceImpl implements WalletService {
@@ -44,8 +45,11 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public Wallet getByUser(int userId) {
-
-        return walletDao.findByUid(userId);
+       Wallet wallet= walletDao.findByUid(userId);
+       if(wallet==null){
+           throw new ResourceNotFoundException("No such wallet With ID: " +userId);
+       }
+       return wallet;
     }
 
     @Override
@@ -116,7 +120,11 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public Wallet getByContact(String contact) {
-        return walletDao.findByContact(contact);
+        Wallet wallet =walletDao.findByContact(contact);
+        if(wallet==null){
+            throw new ResourceNotFoundException("No such wallet With ID: " +contact);
+        }
+        return wallet;
     }
 
     @Override

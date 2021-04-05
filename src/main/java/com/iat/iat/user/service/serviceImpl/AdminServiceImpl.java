@@ -1,6 +1,7 @@
 package com.iat.iat.user.service.serviceImpl;
 
 import com.iat.iat.exceptions.ResourceNotFoundException;
+import com.iat.iat.security.MyUserDetailsService;
 import com.iat.iat.user.converter.AdminUserConverter;
 import com.iat.iat.user.dao.AdminUserDao;
 import com.iat.iat.user.dto.AdminUserDto;
@@ -26,6 +27,7 @@ public class AdminServiceImpl implements AdminService {
     @Autowired AdminUserDao adminUserDao;
     @Autowired
     WalletService walletService;
+    @Autowired MyUserDetailsService myUserDetailsService;
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
     private final Logger logger = LoggerFactory.getLogger(AdminServiceImpl.class);
@@ -150,5 +152,13 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Void DeleteAdmin(int id) {
         return null;
+    }
+
+    @Override
+    public AdminUser changePassword(String password) {
+        User user= myUserDetailsService.currentUser();
+        AdminUser adminUser=getAdmin(user.getId());
+        adminUser.setPassword(passwordEncoder.encode(password));
+        return adminUserDao.save(adminUser);
     }
 }

@@ -29,6 +29,12 @@ public class UserController {
         return new ResponseEntity<>(userConverter.entityToDto(myUserDetailsService.currentUser()), HttpStatus.OK);
     }
 
+    @PutMapping("/changePass/{pass}")
+    public ResponseEntity<UserDto> changePassword(@PathVariable String pass){
+        return new ResponseEntity<>(userConverter.entityToDto(userService.changePassword(pass)), HttpStatus.OK);
+
+    }
+
 
 
 }

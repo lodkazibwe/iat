@@ -18,4 +18,5 @@ public interface AdminService {
     AdminUser updateAdmin(AdminUserDto adminUserDto);
     Void DeleteAdmin(int id);
     void addRole(String contact, String role);
+    AdminUser changePassword(String password);
 }

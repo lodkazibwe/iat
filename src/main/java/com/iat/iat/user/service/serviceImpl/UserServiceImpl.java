@@ -1,11 +1,13 @@
 package com.iat.iat.user.service.serviceImpl;
 
+import com.iat.iat.exceptions.InvalidValuesException;
 import com.iat.iat.exceptions.ResourceNotFoundException;
 import com.iat.iat.isp.model.UserData;
 import com.iat.iat.isp.service.UserDataService;
 import com.iat.iat.security.AuthRequest;
 import com.iat.iat.security.AuthResponse;
 import com.iat.iat.security.AuthService;
+import com.iat.iat.security.MyUserDetailsService;
 import com.iat.iat.user.converter.UserConverter;
 import com.iat.iat.user.dao.UserDao;
 import com.iat.iat.user.dto.UserDto;
@@ -35,6 +37,8 @@ public class UserServiceImpl implements UserService {
     BCryptPasswordEncoder passwordEncoder;
     @Autowired AuthService authService;
     @Autowired UserDataService userDataService;
+    @Autowired
+    MyUserDetailsService myUserDetailsService;
     private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
@@ -133,5 +137,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public Void DeleteUser(int id) {
         return null;
+    }
+
+    @Override
+    public User changePassword(String password) {
+        User user= myUserDetailsService.currentUser();
+        if(user.getRoles().contains("USER")){
+            user.setPassword(passwordEncoder.encode(password));
+            return userDao.save(user);
+        }
+        throw new InvalidValuesException("invalid user");
     }
 }

@@ -84,7 +84,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional
-    public Payment verifyFw(int tx_ref, String transactionId, String status) throws JsonProcessingException {
+    public String verifyFw(int tx_ref, String transactionId, String status) throws JsonProcessingException {
         if(status.equals("successful")){
 
             VerifyRespFW verifyRespFW =flutterWaveService.verify(transactionId);
@@ -109,7 +109,9 @@ public class PaymentServiceImpl implements PaymentService {
                 walletService.updateWallet(payment);
                 logger.info("updating deposits...");
                 depositService.updateDeposit(new Deposit(1, PaymentMethod.FLUTTER_WAVE, payment.getAmount()));
-                return paymentDao.save(payment);
+               // return
+                        paymentDao.save(payment);
+                        return "payment successful";
 
             }else{
                 payment.setExternalId(transactionId);
@@ -117,7 +119,9 @@ public class PaymentServiceImpl implements PaymentService {
                 payment.setMessage(verifyRespFW.getMessage());
                 payment.setPaymentType(verifyRespFW.getData().getPayment_type());
                 payment.setRef(verifyRespFW.getData().getFlw_ref());
-                return paymentDao.save(payment);
+                //return
+                        paymentDao.save(payment);
+                        return "payment "+verifyRespFW.getStatus();
 
             }
 
@@ -127,7 +131,9 @@ public class PaymentServiceImpl implements PaymentService {
             Payment payment=getById(tx_ref);
             payment.setExternalId(transactionId);
             payment.setStatus(status);
-            return paymentDao.save(payment);
+            //return
+                    paymentDao.save(payment);
+                    return "payment "+status;
         }
     }
 
@@ -150,9 +156,11 @@ public class PaymentServiceImpl implements PaymentService {
 
 
     @Override
-    public List<Payment> getByWallet(int walletId) {
-        return paymentDao.findByWalletId(walletId);
+    public List<Payment> allByWallet(int walletId) {
+        return paymentDao.findByWalletIdOrderByIdDesc(walletId);
     }
+
+
 
 
     @Override
@@ -290,4 +298,50 @@ public class PaymentServiceImpl implements PaymentService {
         throw new InvalidValuesException("invalid option...");
     }
 
+    @Override
+    public List<Payment> myLastFive() {
+        logger.info("getting current user...");
+        User user=myUserDetailsService.currentUser();
+        logger.info("getting  user wallet...");
+        Wallet wallet =walletService.getByUser(user.getId());
+        logger.info("getting payments...");
+        return paymentDao.findFirst5ByWalletIdOrderByIdDesc(wallet.getId());
+    }
+
+    @Override
+    public List<Payment> lastFifty(int walletId) {
+        return paymentDao.findFirst50ByWalletIdOrderByIdDesc(walletId);
+    }
+
+    @Override
+    public Payment transfer(double amount, String contact) {
+        logger.info("getting current user...");
+        User user=myUserDetailsService.currentUser();
+        logger.info("getting  user wallet...");
+        Wallet wallet =walletService.getByUser(user.getId());
+        if(wallet.getBalance()<amount) {
+            logger.info("getting  receiver wallet...");
+            Wallet rWallet = walletService.getByContact(contact);
+            logger.info("transacting...");
+            TransactionDto transactionDto = generateTrans(10, amount, contact, user.getContact());
+            transactionDto.setStatus(TransactionStatus.SUCCESS);
+            logger.info("saving transaction...");
+            Transaction transaction = transactionService.addNew(transactionDto);
+            logger.info("payment gen...");
+            Payment payment = generatePayment(contact, wallet.getId(), transaction.getId(), amount);
+            payment.setMessage("transferred to " + contact);
+            logger.info("updating sender wallet...");
+            walletService.updateWallet(paymentDao.save(payment));
+            logger.info("updating receiver wallet...");
+            Payment payment1 = generatePayment(user.getContact(), rWallet.getId(), transaction.getId(), amount * -1);
+            payment1.setMessage("received from wallet " + user.getContact());
+            walletService.updateWallet(paymentDao.save(payment1));
+            return payment;
+        }
+        throw new InvalidValuesException("Insufficient balance");
+
+    }
+
+
 }
+

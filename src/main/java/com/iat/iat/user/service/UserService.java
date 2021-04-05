@@ -18,5 +18,6 @@ public interface UserService {
     User updateUser(UserDto userDto);
     Void DeleteUser(int id);
     boolean userExists(String contact);
+    User changePassword(String password);
 
 }

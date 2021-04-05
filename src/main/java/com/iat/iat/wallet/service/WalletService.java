@@ -6,6 +6,7 @@ import com.iat.iat.wallet.dto.WalletDto;
 import com.iat.iat.wallet.model.Wallet;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface WalletService {
     Wallet create(WalletDto walletDto);

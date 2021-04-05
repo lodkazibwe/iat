@@ -34,5 +34,20 @@ public class WalletController {
         return new ResponseEntity<>(walletConverter.entityToDto(walletService.getAll()), HttpStatus.OK);
     }
 
+    @GetMapping("/admin/getByBalanceGreater/{amount}")
+    public ResponseEntity<List<WalletDto>> getByBalanceGreaterThan(@PathVariable double amount){
+        return new ResponseEntity<>(walletConverter.entityToDto(walletService.getByBalanceGreater(amount)), HttpStatus.OK);
+    }
+
+    @GetMapping("/admin/getByBalanceLess/{amount}")
+    public ResponseEntity<List<WalletDto>> getByBalanceLessThan(@PathVariable double amount){
+        return new ResponseEntity<>(walletConverter.entityToDto(walletService.getByBalanceLess(amount)), HttpStatus.OK);
+    }
+
+    @GetMapping("/admin/getByBalance/{amount}")
+    public ResponseEntity<List<WalletDto>> getByBalanceEqual(@PathVariable double amount){
+        return new ResponseEntity<>(walletConverter.entityToDto(walletService.getByBalance(amount)), HttpStatus.OK);
+    }
+
 
 }
