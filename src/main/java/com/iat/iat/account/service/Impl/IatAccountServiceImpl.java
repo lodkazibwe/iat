@@ -68,7 +68,7 @@ public class IatAccountServiceImpl implements IatAccountService {
     public IatAccount getAccount(String contact) {
         IatAccount iatAccount =iatAccountDao.findByContact(contact);
         if(iatAccount==null){
-            throw new ResourceNotFoundException("contact does not have account");
+            throw new ResourceNotFoundException("no iat for contact yet");
         }
         return iatAccount;
     }
