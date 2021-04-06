@@ -48,7 +48,6 @@ public class FlutterWaveService {
             return response.getBody();
         }
         logger.info("flutterWave service status..."+ httpStatus);
-
         throw new ResourceNotFoundException("external Service Error FW");
     }
 
@@ -69,7 +68,7 @@ public class FlutterWaveService {
 
     }
 
-    public FlutterResp initiate(double amount){
+   /* public FlutterResp initiate(double amount){
         return null;
-    }
+    }*/
 }

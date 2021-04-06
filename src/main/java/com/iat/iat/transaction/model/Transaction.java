@@ -26,7 +26,7 @@ public class Transaction {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date transactionDate;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDateTime;
     private int isp;

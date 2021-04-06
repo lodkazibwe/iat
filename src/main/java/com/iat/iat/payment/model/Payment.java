@@ -22,6 +22,7 @@ public class Payment {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date paymentDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDateTime;
     @Enumerated(EnumType.STRING)

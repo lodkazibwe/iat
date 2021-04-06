@@ -157,6 +157,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public List<Payment> allByWallet(int walletId) {
+
         return paymentDao.findByWalletIdOrderByIdDesc(walletId);
     }
 
@@ -287,13 +288,13 @@ public class PaymentServiceImpl implements PaymentService {
 
     private double gatIatPrice(IatPackage iatPackage) {
         if(iatPackage.equals(IatPackage.DAILY)){
-            return 200;
+            return 20;
         }else if(iatPackage.equals(IatPackage.WEEKLY)){
-            return 1400;
+            return 140;
         }else if(iatPackage.equals(IatPackage.MONTHLY)){
-            return 6000;
+            return 600;
         } else if(iatPackage.equals(IatPackage.YEARLY)){
-            return 72000;
+            return 7200;
         }
         throw new InvalidValuesException("invalid option...");
     }

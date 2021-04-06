@@ -9,9 +9,9 @@ public class PayGatewayController {
     @Autowired FlutterWaveService flutterWaveService;
 
 
-    public ResponseEntity<FlutterResp> initiate(@PathVariable double amount){
+   /* public ResponseEntity<FlutterResp> initiate(@PathVariable double amount){
         return new ResponseEntity<>(flutterWaveService.initiate(amount), HttpStatus.OK);
-    }
+    }*/
 
 
 }
