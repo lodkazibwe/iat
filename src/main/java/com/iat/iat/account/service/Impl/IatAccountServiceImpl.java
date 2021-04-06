@@ -4,7 +4,10 @@ import com.iat.iat.account.dao.IatAccountDao;
 import com.iat.iat.account.model.IatAccount;
 import com.iat.iat.account.service.IatAccountService;
 import com.iat.iat.exceptions.InvalidValuesException;
+import com.iat.iat.exceptions.ResourceNotFoundException;
 import com.iat.iat.payment.model.IatPackage;
+import com.iat.iat.security.MyUserDetailsService;
+import com.iat.iat.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +18,7 @@ import java.util.Date;
 @Service
 public class IatAccountServiceImpl implements IatAccountService {
     @Autowired IatAccountDao iatAccountDao;
+    @Autowired MyUserDetailsService myUserDetailsService;
     @Override
     public IatAccount addAccount(IatAccount iatAccount) {
         return iatAccountDao.save(iatAccount);
@@ -62,7 +66,17 @@ public class IatAccountServiceImpl implements IatAccountService {
 
     @Override
     public IatAccount getAccount(String contact) {
-        return iatAccountDao.findByContact(contact);
+        IatAccount iatAccount =iatAccountDao.findByContact(contact);
+        if(iatAccount==null){
+            throw new ResourceNotFoundException("contact does not have account");
+        }
+        return iatAccount;
+    }
+
+    @Override
+    public IatAccount myIatAccount() {
+        User user=myUserDetailsService.currentUser();
+        return getAccount(user.getContact());
     }
 
     @Override

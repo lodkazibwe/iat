@@ -1,12 +1,11 @@
 package com.iat.iat.account.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Data
@@ -19,5 +18,7 @@ public class IatAccount {
     private int id;
     private String contact;
     private int lastTransaction;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date expireAt;
 }

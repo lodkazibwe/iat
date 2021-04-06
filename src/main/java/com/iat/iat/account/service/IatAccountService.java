@@ -8,4 +8,6 @@ public interface IatAccountService {
     IatAccount updateAccount(IatAccount iatAccount, IatPackage iatPackage);
     IatAccount getAccount(String contact);
     boolean existsByContact(String contact);
+
+    IatAccount myIatAccount();
 }
