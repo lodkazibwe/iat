@@ -8,6 +8,8 @@ import com.iat.iat.payment.model.PaymentMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class DepositServiceImpl implements DepositService {
     @Autowired DepositDao depositDao;
@@ -44,5 +46,10 @@ public class DepositServiceImpl implements DepositService {
 
     public boolean existByMethod(PaymentMethod method){
         return depositDao.existsByPaymentMethod(method);
+    }
+
+    @Override
+    public List<Deposit> getAll() {
+        return depositDao.findAll();
     }
 }

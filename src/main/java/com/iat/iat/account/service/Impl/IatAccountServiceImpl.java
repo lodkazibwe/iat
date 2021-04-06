@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class IatAccountServiceImpl implements IatAccountService {
@@ -82,5 +83,10 @@ public class IatAccountServiceImpl implements IatAccountService {
     @Override
     public boolean existsByContact(String contact) {
         return iatAccountDao.existsByContact(contact);
+    }
+
+    @Override
+    public List<IatAccount> getAll() {
+        return iatAccountDao.findAll();
     }
 }

@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class IatServiceImpl implements IatService {
     @Autowired IatDao iatDao;
@@ -45,5 +47,10 @@ public class IatServiceImpl implements IatService {
 
     public boolean existsByIsp(int isp){
         return iatDao.existsByIsp(isp);
+    }
+
+    @Override
+    public List<Iat> getAll() {
+        return iatDao.findAll();
     }
 }
