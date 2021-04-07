@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -54,6 +55,11 @@ public class UserController {
     @GetMapping("/admin/getUser/{contact}")
     public ResponseEntity<UserDto> getUserByContact(@PathVariable String contact){
         return new ResponseEntity<>(userConverter.entityToDto(userService.getUser(contact)), HttpStatus.OK);
+    }
+
+    @GetMapping("/admin/getAll")
+    public ResponseEntity<List<UserDto>> getAllUsers(){
+        return new ResponseEntity<>(userConverter.entityToDto(userService.getAll()), HttpStatus.OK);
     }
 
     @GetMapping("/admin/userInfo/{uid}")
