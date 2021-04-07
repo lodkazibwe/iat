@@ -13,4 +13,6 @@ public interface UserDataService {
     List<UserData> getData(String residence);
     ContactStatusDto isContactAvailable(String contact);
     boolean existsByContact(String contact);
+
+    List<UserData> getAll();
 }

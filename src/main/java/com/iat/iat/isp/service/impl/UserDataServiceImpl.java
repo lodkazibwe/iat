@@ -44,6 +44,11 @@ public class UserDataServiceImpl implements UserDataService {
     }
 
     @Override
+    public List<UserData> getAll() {
+        return userDataDao.findAll();
+    }
+
+    @Override
     public UserData getUserData(String contact) {
         return userDataDao.findByContact(contact);
     }

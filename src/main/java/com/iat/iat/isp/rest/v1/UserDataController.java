@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/userData")
@@ -31,6 +33,12 @@ public class UserDataController {
     public ResponseEntity<UserDataDto> getUserData(@PathVariable int id){
         return new ResponseEntity<>(userDataConverter.entityToDto(userDataService.getUserData(id)), HttpStatus.OK);
     }
+
+    @GetMapping("admin/getAll")
+    public ResponseEntity<List<UserDataDto>>allUserData(){
+        return new ResponseEntity<>(userDataConverter.entityToDto(userDataService.getAll()), HttpStatus.OK);
+    }
+
 
     @GetMapping("/all/checkContact/{contact}")
     public ResponseEntity<ContactStatusDto> isContactAvailable(@PathVariable String contact){
