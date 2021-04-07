@@ -143,11 +143,14 @@ public class UserServiceImpl implements UserService {
     public User changePassword(ChangePassDto changePassDto) {
         User user= myUserDetailsService.currentUser();
         if(changePassDto.getNewPass().equals(changePassDto.getConfirm())){
-            if(user.getPassword().equals(passwordEncoder.encode(changePassDto.getOldPass()))){
+            boolean bool =authService.checkUser(new AuthRequest(user.getContact(), changePassDto.getOldPass()));
+            if(bool){
                 user.setPassword(passwordEncoder.encode(changePassDto.getNewPass()));
                 return userDao.save(user);
             }
-            throw new InvalidValuesException("invalid user");
+            logger.info("");
+            //passwordEncoder.matches(user.getPassword(), passwordEncoder.encode(changePassDto.getOldPass()));
+            throw new InvalidValuesException("incorrect old password");
         }
         throw new InvalidValuesException("password mismatch");
 

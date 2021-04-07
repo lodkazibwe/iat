@@ -40,6 +40,20 @@ public class AuthService {
 
     }
 
+    public boolean checkUser(AuthRequest authRequest){
+        try {
+            logger.info("checking auth....");
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authRequest.getUserName(), authRequest.getPassword())
+            );
+        } catch (Exception e) {
+            logger.info("invalid pass....");
+            throw new InvalidValuesException("Incorrect old password");
+
+        }
+        return true;
+    }
+
     public AuthResponseV2 authenticate(AuthRequest authRequest){
         return new AuthResponseV2(
            getJwt(authRequest), userConverter.entityToDto(myUserDetailsService.getUser(authRequest.getUserName()))
