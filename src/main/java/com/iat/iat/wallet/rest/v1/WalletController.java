@@ -29,6 +29,15 @@ public class WalletController {
         return new ResponseEntity<>(walletConverter.entityToDto(walletService.myWallet()), HttpStatus.OK);
     }
 
+    @GetMapping("/admin/getById/{id}")
+    public ResponseEntity<WalletDto> getById(@PathVariable int id){
+        return new ResponseEntity<>(walletConverter.entityToDto(walletService.getById(id)), HttpStatus.OK);
+    }
+    @GetMapping("/admin/getByContact/{contact}")
+    public ResponseEntity<WalletDto> getByContact(@PathVariable String contact){
+        return new ResponseEntity<>(walletConverter.entityToDto(walletService.getByContact(contact)), HttpStatus.OK);
+    }
+
     @GetMapping("/admin/getAll")
     public ResponseEntity<List<WalletDto>> getAll(){
         return new ResponseEntity<>(walletConverter.entityToDto(walletService.getAll()), HttpStatus.OK);
