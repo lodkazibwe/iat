@@ -5,7 +5,12 @@ import com.iat.iat.security.MyUserDetailsService;
 import com.iat.iat.user.converter.UserConverter;
 import com.iat.iat.user.dto.ChangePassDto;
 import com.iat.iat.user.dto.UserDto;
+import com.iat.iat.user.dto.UserInfo;
 import com.iat.iat.user.service.UserService;
+import com.iat.iat.wallet.converter.WalletConverter;
+import com.iat.iat.wallet.dto.WalletDto;
+import com.iat.iat.wallet.model.Wallet;
+import com.iat.iat.wallet.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +24,10 @@ import javax.validation.Valid;
 public class UserController {
     @Autowired
     UserService userService;
+    @Autowired WalletService walletService;
     @Autowired UserConverter userConverter;
     @Autowired MyUserDetailsService myUserDetailsService;
+    @Autowired WalletConverter walletConverter;
 
     @PostMapping("/signUp")
     public ResponseEntity<AuthResponse> signUp(@RequestBody UserDto userDto){
@@ -38,6 +45,24 @@ public class UserController {
         return new ResponseEntity<>(userConverter.entityToDto(userService.changePassword(changePassDto)), HttpStatus.OK);
 
     }
+
+    @GetMapping("/admin/getUserById/{id}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable int id){
+        return new ResponseEntity<>(userConverter.entityToDto(userService.getUser(id)), HttpStatus.OK);
+    }
+
+    @GetMapping("/admin/getUser/{contact}")
+    public ResponseEntity<UserDto> getUserByContact(@PathVariable String contact){
+        return new ResponseEntity<>(userConverter.entityToDto(userService.getUser(contact)), HttpStatus.OK);
+    }
+
+    @GetMapping("/admin/userInfo/{uid}")
+    public ResponseEntity<UserInfo> userInfo(@PathVariable int uid){
+        WalletDto walletDto =walletConverter.entityToDto(walletService.getByUser(uid));
+        UserDto userDto =userConverter.entityToDto(userService.getUser(uid));
+        return new ResponseEntity<>(new UserInfo(userDto, walletDto), HttpStatus.OK);
+    }
+
 
 
 

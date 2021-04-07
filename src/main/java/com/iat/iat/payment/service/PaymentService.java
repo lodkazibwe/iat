@@ -25,6 +25,7 @@ public interface PaymentService {
     Payment buyIat(BuyIatDto buyIatDto);
     Payment transfer(double amount, String contact);
     Payment myLastPayment();
+    List<Payment> myPayments();
     List<Payment> myLastFive();
     List<Payment> lastFifty(int walletId);
 }

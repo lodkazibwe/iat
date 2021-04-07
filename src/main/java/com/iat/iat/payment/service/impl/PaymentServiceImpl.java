@@ -310,6 +310,15 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    public List<Payment> myPayments() {
+        logger.info("getting current user...");
+        User user=myUserDetailsService.currentUser();
+        logger.info("getting  user wallet...");
+        Wallet wallet =walletService.getByUser(user.getId());
+        return paymentDao.findByWalletIdOrderByIdDesc(wallet.getId());
+    }
+
+    @Override
     public List<Payment> lastFifty(int walletId) {
         return paymentDao.findFirst50ByWalletIdOrderByIdDesc(walletId);
     }

@@ -53,6 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/root/**").hasRole("ROOT")
                 .antMatchers("/wallet/admin/**").hasRole("ADMIN")
                 .antMatchers("/wallet/root/**").hasRole("ROOT")
+                .antMatchers("/account/admin/**").hasRole("ADMIN")
                 .antMatchers(
                         HttpMethod.GET,
                         "/",

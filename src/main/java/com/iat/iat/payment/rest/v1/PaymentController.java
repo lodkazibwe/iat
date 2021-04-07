@@ -55,6 +55,13 @@ public class PaymentController {
         return new ResponseEntity<>(paymentConverter.entityToDto(paymentService.myLastFive()), HttpStatus.OK);
 
     }
+
+    @GetMapping("/myPayments")
+    public ResponseEntity<List<PaymentDto>> myPayments(){
+        return new ResponseEntity<>(paymentConverter.entityToDto(paymentService.myPayments()), HttpStatus.OK);
+
+    }
+
     @GetMapping("/admin/allByWallet/{walletId}")
     public ResponseEntity<List<PaymentDto>> getByWallet(@PathVariable int walletId){
         return new ResponseEntity<>(paymentConverter.entityToDto(paymentService.allByWallet(walletId)), HttpStatus.OK);
@@ -62,7 +69,7 @@ public class PaymentController {
     }
 
     @GetMapping("/admin/getByWallet/{walletId}")
-    public ResponseEntity<List<PaymentDto>> lastFifty(@PathVariable int walletId){
+    public ResponseEntity<List<PaymentDto>> lastFiftyByWallet(@PathVariable int walletId){
         return new ResponseEntity<>(paymentConverter.entityToDto(paymentService.lastFifty(walletId)), HttpStatus.OK);
 
     }
