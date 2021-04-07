@@ -18,6 +18,7 @@ public interface PaymentService {
     List<Payment> myDatePayments(Date paymentDate);
     Payment getById(int id);
     List<Payment> getByDate(Date paymentDate);
+    List<Payment> getByDateRange(Date date1, Date date2);
     List<Payment> allByWallet(int walletId);
     Payment updatePayment(PaymentDto paymentDto);
     void deletePayment(int id);

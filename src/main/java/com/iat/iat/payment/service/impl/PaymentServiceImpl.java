@@ -145,7 +145,13 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public List<Payment> getByDate(Date paymentDate) {
+
         return paymentDao.findByPaymentDate(paymentDate);
+    }
+
+    @Override
+    public List<Payment> getByDateRange(Date date1, Date date2) {
+        return paymentDao.findByPaymentDateGreaterThanEqualAndPaymentDateLessThanEqual(date1, date2);
     }
 
     @Override

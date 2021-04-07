@@ -1,5 +1,6 @@
 package com.iat.iat.payment.rest.v1;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.iat.iat.flutterWave.FlutterResp;
 import com.iat.iat.payment.converter.PaymentConverter;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
@@ -71,6 +73,21 @@ public class PaymentController {
     @GetMapping("/admin/getByWallet/{walletId}")
     public ResponseEntity<List<PaymentDto>> lastFiftyByWallet(@PathVariable int walletId){
         return new ResponseEntity<>(paymentConverter.entityToDto(paymentService.lastFifty(walletId)), HttpStatus.OK);
+
+    }
+
+    @GetMapping("/admin/getByDate/{date}")
+    public ResponseEntity<List<PaymentDto>> getByPaymentDate(
+            @PathVariable @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd") Date date){
+        return new ResponseEntity<>(paymentConverter.entityToDto(paymentService.getByDate(date)), HttpStatus.OK);
+
+    }
+
+    @GetMapping("/admin/getByDateRange/{date1}/{date2}")
+    public ResponseEntity<List<PaymentDto>> getByPaymentDateRange(
+            @PathVariable @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd") Date date1,
+            @PathVariable @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd") Date date2){
+        return new ResponseEntity<>(paymentConverter.entityToDto(paymentService.getByDateRange(date1, date2)), HttpStatus.OK);
 
     }
 

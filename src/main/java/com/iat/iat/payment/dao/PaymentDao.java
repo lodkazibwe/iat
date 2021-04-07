@@ -11,6 +11,7 @@ import java.util.List;
 public interface PaymentDao extends JpaRepository<Payment, Integer> {
     List<Payment> findByWalletIdOrderByIdDesc(int walletId);
     List<Payment> findByPaymentDate(Date paymentDate);
+    List<Payment> findByPaymentDateGreaterThanEqualAndPaymentDateLessThanEqual(Date date1, Date date2);
     List<Payment> findByPaymentDateAndWalletId(Date paymentDate, int walletId);
     List<Payment> findFirst5ByWalletIdOrderByIdDesc(int walletId);
     List<Payment> findFirst50ByWalletIdOrderByIdDesc(int walletId);
