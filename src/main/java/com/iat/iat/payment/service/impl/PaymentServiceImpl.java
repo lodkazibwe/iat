@@ -146,12 +146,12 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public List<Payment> getByDate(Date paymentDate) {
 
-        return paymentDao.findByPaymentDate(paymentDate);
+        return paymentDao.findByPaymentDateAndStatus(paymentDate, "success");
     }
 
     @Override
     public List<Payment> getByDateRange(Date date1, Date date2) {
-        return paymentDao.findByPaymentDateGreaterThanEqualAndPaymentDateLessThanEqual(date1, date2);
+        return paymentDao.findByPaymentDateGreaterThanEqualAndPaymentDateLessThanEqualAndStatus(date1, date2, "success");
     }
 
     @Override
@@ -163,10 +163,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public List<Payment> allByWallet(int walletId) {
-
         return paymentDao.findByWalletIdOrderByIdDesc(walletId);
     }
-
 
 
 
@@ -312,7 +310,7 @@ public class PaymentServiceImpl implements PaymentService {
         logger.info("getting  user wallet...");
         Wallet wallet =walletService.getByUser(user.getId());
         logger.info("getting payments...");
-        return paymentDao.findFirst5ByWalletIdOrderByIdDesc(wallet.getId());
+        return paymentDao.findFirst5ByWalletIdAndStatusOrderByIdDesc(wallet.getId(), "success");
     }
 
     @Override
@@ -321,12 +319,12 @@ public class PaymentServiceImpl implements PaymentService {
         User user=myUserDetailsService.currentUser();
         logger.info("getting  user wallet...");
         Wallet wallet =walletService.getByUser(user.getId());
-        return paymentDao.findByWalletIdOrderByIdDesc(wallet.getId());
+        return paymentDao.findByWalletIdAndStatusOrderByIdDesc(wallet.getId(), "success");
     }
 
     @Override
     public List<Payment> lastFifty(int walletId) {
-        return paymentDao.findFirst50ByWalletIdOrderByIdDesc(walletId);
+        return paymentDao.findFirst50ByWalletIdAndStatusOrderByIdDesc(walletId, "success");
     }
 
     @Override
