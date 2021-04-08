@@ -88,7 +88,7 @@ public class PaymentServiceImpl implements PaymentService {
         if(status.equals("successful")){
 
             VerifyRespFW verifyRespFW =flutterWaveService.verify(transactionId);
-            Payment payment=getById(tx_ref);
+            Payment payment=getById(verifyRespFW.getData().getTx_ref());
             logger.info(""+verifyRespFW.getData().getAmount());
             logger.info(""+verifyRespFW.getStatus());
             //verifyRespFW.getData().getTx_ref();
@@ -99,8 +99,7 @@ public class PaymentServiceImpl implements PaymentService {
             }
 
             if(verifyRespFW.getStatus().equals("success")
-                    & verifyRespFW.getData().getAmount()>=payment.getAmount()
-                    &tx_ref==verifyRespFW.getData().getTx_ref()){
+                    & verifyRespFW.getData().getAmount()>=payment.getAmount()){
                 payment.setExternalId(transactionId);
                 payment.setStatus(verifyRespFW.getStatus());
                 payment.setMessage(verifyRespFW.getMessage());

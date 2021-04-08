@@ -2,6 +2,8 @@ package com.iat.iat.user.service.serviceImpl;
 
 import com.iat.iat.exceptions.InvalidValuesException;
 import com.iat.iat.exceptions.ResourceNotFoundException;
+import com.iat.iat.security.AuthRequest;
+import com.iat.iat.security.AuthService;
 import com.iat.iat.security.MyUserDetailsService;
 import com.iat.iat.user.converter.AdminUserConverter;
 import com.iat.iat.user.dao.AdminUserDao;
@@ -32,6 +34,7 @@ public class AdminServiceImpl implements AdminService {
     @Autowired MyUserDetailsService myUserDetailsService;
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
+    @Autowired AuthService authService;
     private final Logger logger = LoggerFactory.getLogger(AdminServiceImpl.class);
 
     @Override
@@ -160,7 +163,8 @@ public class AdminServiceImpl implements AdminService {
     public AdminUser changePassword(ChangePassDto changePassDto) {
         User user= myUserDetailsService.currentUser();
         if(changePassDto.getNewPass().equals(changePassDto.getConfirm())){
-        if(user.getPassword().equals(passwordEncoder.encode(changePassDto.getOldPass()))){
+            boolean bool =authService.checkUser(new AuthRequest(user.getContact(), changePassDto.getOldPass()));
+        if(bool){
         AdminUser adminUser=getAdmin(user.getId());
                     adminUser.setPassword(passwordEncoder.encode(changePassDto.getNewPass()));
                     return adminUserDao.save(adminUser);
