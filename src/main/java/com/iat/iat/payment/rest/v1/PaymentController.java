@@ -35,6 +35,11 @@ public class PaymentController {
         return new ResponseEntity<>(paymentService.verifyFw(tx_ref,transaction_id,status), HttpStatus.OK);
     }
 
+    @GetMapping("/admin/verify/{id}/{ext_id}")
+    public ResponseEntity<String> adminVerify(@PathVariable int id, @PathVariable String ext_id) throws JsonProcessingException {
+        return new ResponseEntity<>(paymentService.verifyFw(id,ext_id,"successful"), HttpStatus.OK);
+    }
+
     @GetMapping("/myLastPayment")
     public ResponseEntity<PaymentDto> myLastPayment(){
         return new ResponseEntity<>(paymentConverter.entityToDto(paymentService.myLastPayment()), HttpStatus.OK);

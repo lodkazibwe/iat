@@ -91,6 +91,7 @@ public class PaymentServiceImpl implements PaymentService {
             Payment payment=getById(tx_ref);
             logger.info(""+verifyRespFW.getData().getAmount());
             logger.info(""+verifyRespFW.getStatus());
+            verifyRespFW.getData().getTx_ref();
 
             if(verifyRespFW.getData().getFlw_ref().equals(payment.getRef())){
                 logger.info("double verification...");
@@ -98,7 +99,8 @@ public class PaymentServiceImpl implements PaymentService {
             }
 
             if(verifyRespFW.getStatus().equals("success")
-                    & verifyRespFW.getData().getAmount()>=payment.getAmount()){
+                    & verifyRespFW.getData().getAmount()>=payment.getAmount()
+                    &tx_ref==verifyRespFW.getData().getTx_ref()){
                 payment.setExternalId(transactionId);
                 payment.setStatus(verifyRespFW.getStatus());
                 payment.setMessage(verifyRespFW.getMessage());
