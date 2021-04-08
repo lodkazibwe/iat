@@ -91,7 +91,7 @@ public class PaymentServiceImpl implements PaymentService {
             Payment payment=getById(tx_ref);
             logger.info(""+verifyRespFW.getData().getAmount());
             logger.info(""+verifyRespFW.getStatus());
-            verifyRespFW.getData().getTx_ref();
+            //verifyRespFW.getData().getTx_ref();
 
             if(verifyRespFW.getData().getFlw_ref().equals(payment.getRef())){
                 logger.info("double verification...");
