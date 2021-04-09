@@ -2,6 +2,7 @@ package com.iat.iat.user.service.serviceImpl;
 
 import com.iat.iat.exceptions.InvalidValuesException;
 import com.iat.iat.exceptions.ResourceNotFoundException;
+import com.iat.iat.isp.model.UserData;
 import com.iat.iat.isp.service.UserDataService;
 import com.iat.iat.security.AuthRequest;
 import com.iat.iat.security.AuthResponse;
@@ -60,6 +61,7 @@ public class UserServiceImpl implements UserService {
         logger.info("checking user data...");
         //boolean bool1 =pendingUserService.isVerified(createUserDto.getContact());
         //boolean bool2 =userDataService.existsByContact(createUserDto.getContact());
+
         logger.info("checking user...");
         boolean bool =userExists(createUserDto.getContact());
         if(bool){
@@ -67,9 +69,11 @@ public class UserServiceImpl implements UserService {
             throw new ResourceNotFoundException("user already exists...");
         }
         logger.info("generating user...");
+        UserData userData =userDataService.getUserData(createUserDto.getContact());
         User user =userConverter.dtoToEntity(createUserDto);
         logger.info("setting user role...");
         user.setRoles(getRoles());
+        user.setName(userData.getFirstName()+" "+userData.getFirstName());
         logger.info("saving user and creating wallet...");
         createWallet(userDao.save(user));
         AuthRequest authRequest =new AuthRequest();
@@ -108,8 +112,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(String contact) {
-
-        return userDao.findByContact(contact);
+        User user =userDao.findByContact(contact);
+        if(user==null){
+            throw new ResourceNotFoundException("No such user: " +contact);
+        }
+        return user;
     }
 
     @Override

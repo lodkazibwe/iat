@@ -50,7 +50,12 @@ public class UserDataServiceImpl implements UserDataService {
 
     @Override
     public UserData getUserData(String contact) {
-        return userDataDao.findByContact(contact);
+        UserData userData=userDataDao.findByContact(contact);
+        if(userData==null){
+            throw new ResourceNotFoundException("No such subscriber: " +contact);
+        }
+
+        return userData;
     }
 
     @Override
