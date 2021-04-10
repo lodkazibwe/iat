@@ -36,8 +36,8 @@ public class PaymentController {
     }
 
     @PutMapping("/admin/verify")
-    public ResponseEntity<String> adminVerify(@RequestParam String ext_id) throws JsonProcessingException {
-        return new ResponseEntity<>(paymentService.verifyFw(1,ext_id,"successful"), HttpStatus.OK);
+    public ResponseEntity<String> adminVerify(@RequestParam String tid) throws JsonProcessingException {
+        return new ResponseEntity<>(paymentService.verifyFw(1,tid,"successful"), HttpStatus.OK);
     }
 
     @GetMapping("/myLastPayment")
