@@ -3,11 +3,14 @@ package com.iat.iat.payment.rest.v1;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.iat.iat.flutterWave.FlutterResp;
+import com.iat.iat.flutterWave.FlutterWaveService;
+import com.iat.iat.flutterWave.UserFWTransactions;
 import com.iat.iat.payment.converter.PaymentConverter;
 import com.iat.iat.payment.dto.BuyIatDto;
 import com.iat.iat.payment.dto.PaymentDto;
 import com.iat.iat.payment.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +25,7 @@ public class PaymentController {
     @Autowired
     PaymentService paymentService;
     @Autowired PaymentConverter paymentConverter;
+    @Autowired FlutterWaveService flutterWaveService;
 
     @PostMapping("/depositFW/{amount}")
     public ResponseEntity<FlutterResp> depositFW(@PathVariable double amount){
@@ -38,6 +42,12 @@ public class PaymentController {
     @PutMapping("/admin/verify")
     public ResponseEntity<String> adminVerify(@RequestParam String tid) throws JsonProcessingException {
         return new ResponseEntity<>(paymentService.verifyFw(1,tid,"successful"), HttpStatus.OK);
+    }
+
+    @GetMapping("/admin/userFWPayments/{contact}")
+    public ResponseEntity<UserFWTransactions> userFWPayments(@PathVariable String contact) throws JsonProcessingException{
+        return new ResponseEntity<>(flutterWaveService.allFWTransactions(contact), HttpStatus.OK);
+
     }
 
     @GetMapping("/myLastPayment")
@@ -83,15 +93,15 @@ public class PaymentController {
 
     @GetMapping("/admin/getByDate/{date}")
     public ResponseEntity<List<PaymentDto>> getByPaymentDate(
-            @PathVariable @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd") Date date){
+            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date){
         return new ResponseEntity<>(paymentConverter.entityToDto(paymentService.getByDate(date)), HttpStatus.OK);
 
     }
 
     @GetMapping("/admin/getByDateRange/{date1}/{date2}")
     public ResponseEntity<List<PaymentDto>> getByPaymentDateRange(
-            @PathVariable @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd") Date date1,
-            @PathVariable @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd") Date date2){
+            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date1,
+            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date2){
         return new ResponseEntity<>(paymentConverter.entityToDto(paymentService.getByDateRange(date1, date2)), HttpStatus.OK);
 
     }

@@ -220,7 +220,7 @@ public class PaymentServiceImpl implements PaymentService {
             Transaction transaction=transactionService.addNew(transactionDto);
             Payment payment =generatePayment(buyIatDto.getContact(), wallet.getId(), transaction.getId(), iatPrice);
             logger.info("updating iat...");
-            iatService.updateIat(new Iat(1,buyIatDto.getIsp(),iatPrice));
+            iatService.updateIat(new Iat(1,buyIatDto.getIsp(),"",iatPrice));
             logger.info("updating tax account...");
             iatAccountService.updateAccount(iatAccount, buyIatDto.getIatPackage());
             logger.info("saving payment...");

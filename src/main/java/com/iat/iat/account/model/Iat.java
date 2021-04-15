@@ -17,5 +17,6 @@ public class Iat {
     @GeneratedValue
     private int id;
     private int isp;
+    private String ispName;
     private double amount;
 }

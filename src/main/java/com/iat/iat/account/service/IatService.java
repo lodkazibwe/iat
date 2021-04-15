@@ -11,5 +11,8 @@ public interface IatService {
     Iat findByIsp(int isp);
     Iat getIatAccount(int id);
     List<Iat> getAll();
+    void reset();
+    void reset(int isp, double amount);
+
 
 }

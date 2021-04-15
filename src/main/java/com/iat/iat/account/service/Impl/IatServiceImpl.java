@@ -20,6 +20,7 @@ public class IatServiceImpl implements IatService {
         Iat iat =new Iat();
         iat.setAmount(0);
         iat.setIsp(iat1.getIsp());
+        iat.setIspName(iat1.getIspName());
         return iatDao.save(iat);
     }
 
@@ -52,5 +53,19 @@ public class IatServiceImpl implements IatService {
     @Override
     public List<Iat> getAll() {
         return iatDao.findAll();
+    }
+
+    @Override
+    public void reset() {
+        //List<Iat> iatList =getAll();
+
+    }
+
+    @Override
+    @Transactional
+    public void reset(int isp, double amount) {
+        Iat iat=findByIsp(isp);
+        iat.setAmount(iat.getAmount()-amount);
+        iatDao.save(iat);
     }
 }

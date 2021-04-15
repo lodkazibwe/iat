@@ -8,17 +8,18 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Date;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-public class IatAccount {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class IatHistory {
     @Id
     @GeneratedValue
     private int id;
-    private String contact;
-    private int lastTransaction;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, locale = "pt-BR", timezone = "EAT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date expireAt;
+    private int ispId;
+    private String ispName;
+    private double amount;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", locale = "pt-BR", timezone = "EAT")
+    @Temporal(TemporalType.DATE)
+    private Date date;
 }

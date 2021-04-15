@@ -20,10 +20,10 @@ public class PaymentDto {
     @NotNull (message ="amount cannot be null")
     private double amount;
     private int walletId;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", locale = "pt-BR", timezone = "EAT")
     @Temporal(TemporalType.DATE)
     private Date paymentDate;
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonFormat(shape = JsonFormat.Shape.STRING,locale = "pt-BR", timezone = "EAT")
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDateTime;
     private PaymentMethod paymentMethod;

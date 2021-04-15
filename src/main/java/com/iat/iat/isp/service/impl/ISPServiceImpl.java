@@ -23,7 +23,7 @@ public class ISPServiceImpl implements ISPService {
     @Transactional
     public ISP addIsp(ISPDto ispDto) {
         ISP isp= ispDao.save(ispConverter.dtoToEntity(ispDto));
-        Iat iat =new Iat(1,isp.getId(),0);
+        Iat iat =new Iat(1,isp.getId(),isp.getName(),0);
         iatService.addIatAccount(iat);
         return isp;
     }
