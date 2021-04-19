@@ -1,6 +1,5 @@
 package com.iat.iat.account.rest.v1;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.iat.iat.account.model.Deposit;
 import com.iat.iat.account.model.Iat;
 import com.iat.iat.account.model.IatAccount;
@@ -43,12 +42,12 @@ public class AccountController {
     }
 
     @GetMapping("/admin/allDeposit")
-    public ResponseEntity<List<Deposit>> getAllDepositAccounts(){
+    public ResponseEntity<List<Deposit>> getAllCurrentDepositToday(){
         return new ResponseEntity<>(depositService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("/admin/allIat")
-    public ResponseEntity<List<Iat>> getAllIatPaidAccounts(){
+    public ResponseEntity<List<Iat>> getAllCurrentIatPaidToday(){
         return new ResponseEntity<>(iatService.getAll(), HttpStatus.OK);
     }
 
@@ -80,5 +79,6 @@ public class AccountController {
     //                                               @RequestParam String status ) throws JsonProcessingException {
     //        return new ResponseEntity<>(paymentService.verifyFw(tx_ref,transaction_id,status), HttpStatus.OK);
     //    }
+
 
 }

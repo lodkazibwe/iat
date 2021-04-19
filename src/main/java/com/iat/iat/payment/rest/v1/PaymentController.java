@@ -1,6 +1,5 @@
 package com.iat.iat.payment.rest.v1;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.iat.iat.flutterWave.FlutterResp;
 import com.iat.iat.flutterWave.FlutterWaveService;

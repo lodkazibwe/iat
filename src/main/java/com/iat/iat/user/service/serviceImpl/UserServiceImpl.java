@@ -146,6 +146,14 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+
+    @Override
+    public void updateUserImage(String fileName, int uid) {
+        User user=getUser(uid);
+        user.setImage(fileName);
+        userDao.save(user);
+    }
+
     @Override
     public User changePassword(ChangePassDto changePassDto) {
         User user= myUserDetailsService.currentUser();

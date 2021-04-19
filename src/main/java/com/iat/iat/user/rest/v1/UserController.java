@@ -1,5 +1,6 @@
 package com.iat.iat.user.rest.v1;
 
+import com.iat.iat.firebase.File.FileService;
 import com.iat.iat.security.AuthResponse;
 import com.iat.iat.security.MyUserDetailsService;
 import com.iat.iat.user.converter.UserConverter;
@@ -15,8 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 @CrossOrigin
@@ -29,6 +33,7 @@ public class UserController {
     @Autowired UserConverter userConverter;
     @Autowired MyUserDetailsService myUserDetailsService;
     @Autowired WalletConverter walletConverter;
+    @Autowired FileService fileService;
 
     @PostMapping("/signUp")
     public ResponseEntity<AuthResponse> signUp(@RequestBody UserDto userDto){
@@ -67,6 +72,18 @@ public class UserController {
         WalletDto walletDto =walletConverter.entityToDto(walletService.getByUser(uid));
         UserDto userDto =userConverter.entityToDto(userService.getUser(uid));
         return new ResponseEntity<>(new UserInfo(userDto, walletDto), HttpStatus.OK);
+    }
+
+    @PostMapping("/uploadImage")
+    public ResponseEntity<URL> updateImage(@RequestParam("file") MultipartFile file)
+            throws IOException {
+        return new ResponseEntity<>(fileService.uploadImage(file), HttpStatus.OK);
+    }
+
+    @GetMapping("/myImage")
+    public ResponseEntity<URL> getImage(){
+        return  new ResponseEntity<>(fileService.signedUrl(), HttpStatus.OK);
+
     }
 
 

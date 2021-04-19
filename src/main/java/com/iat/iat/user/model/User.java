@@ -21,6 +21,7 @@ public class User {
     private String email;
     private String name;
     private String password;
+    private String image;
     @OneToMany(targetEntity = Role.class,cascade= CascadeType.ALL, fetch= FetchType.EAGER)
     @JoinColumn()
     private Set<Role> roles;

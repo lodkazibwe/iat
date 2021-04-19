@@ -19,4 +19,6 @@ public interface UserService {
     Void DeleteUser(int id);
     boolean userExists(String contact);
     User changePassword(ChangePassDto changePassDto);
+
+    void updateUserImage(String fileName, int id);
 }

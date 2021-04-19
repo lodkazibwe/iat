@@ -21,7 +21,7 @@ public class IatHistoryServiceImpl implements IatHistoryService {
 
 
     @Transactional
-    @Scheduled(cron = "0 50 23 * * *",zone = "EAT")
+    @Scheduled(cron = "30 59 23 * * *",zone = "EAT")
     public void getCurrentIat(){
         List<Iat> iatList =iatService.getAll();
         List<IatHistory> iatHistoryList =new ArrayList<>();
