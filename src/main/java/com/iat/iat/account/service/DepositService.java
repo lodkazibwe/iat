@@ -12,4 +12,6 @@ public interface DepositService {
     Deposit getByMethod(PaymentMethod paymentMethod);
     boolean existByMethod(PaymentMethod method);
     List<Deposit> getAll();
+
+    void reset(PaymentMethod paymentMethod, double amount);
 }

@@ -1,18 +1,44 @@
 package com.iat.iat.account.service.Impl;
 
 import com.iat.iat.account.dao.DepositHistoryDao;
+import com.iat.iat.account.model.Deposit;
 import com.iat.iat.account.model.DepositHistory;
 import com.iat.iat.account.service.DepositHistoryService;
+import com.iat.iat.account.service.DepositService;
 import com.iat.iat.payment.model.PaymentMethod;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Service
 public class DepositHistoryServiceImpl implements DepositHistoryService {
     @Autowired DepositHistoryDao depositHistoryDao;
+    @Autowired DepositService depositService;
+
+
+    @Transactional
+    @Scheduled(cron = "30 59 23 * * *",zone = "EAT")
+    public void getCurrentIat(){
+
+        List<Deposit> depositList =depositService.getAll();
+        List<DepositHistory> depositHistoryList = new ArrayList<>();
+        for(Deposit deposit:depositList){
+            DepositHistory depositHistory =new DepositHistory();
+            depositHistory.setAmount(deposit.getAmount());
+            depositHistory.setDate(new Date());
+            depositHistory.setPaymentMethod(deposit.getPaymentMethod());
+            depositHistoryList.add(depositHistory);
+            depositService.reset(deposit.getPaymentMethod(),deposit.getAmount());
+        }
+        addList(depositHistoryList);
+
+    }
+
     @Override
     public DepositHistory add(DepositHistory depositHistory) {
         return depositHistoryDao.save(depositHistory);

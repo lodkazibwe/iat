@@ -52,4 +52,11 @@ public class DepositServiceImpl implements DepositService {
     public List<Deposit> getAll() {
         return depositDao.findAll();
     }
+
+    @Override
+    public void reset(PaymentMethod paymentMethod, double amount) {
+        Deposit deposit= getByMethod(paymentMethod);
+        deposit.setAmount(deposit.getAmount()-amount);
+        depositDao.save(deposit);
+    }
 }
