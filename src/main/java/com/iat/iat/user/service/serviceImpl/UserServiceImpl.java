@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
         User user =userConverter.dtoToEntity(createUserDto);
         logger.info("setting user role...");
         user.setRoles(getRoles());
-        user.setName(userData.getFirstName()+" "+userData.getFirstName());
+        user.setName(userData.getFirstName()+" "+userData.getLastName());
         logger.info("saving user and creating wallet...");
         createWallet(userDao.save(user));
         AuthRequest authRequest =new AuthRequest();

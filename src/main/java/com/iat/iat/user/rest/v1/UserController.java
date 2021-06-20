@@ -36,7 +36,7 @@ public class UserController {
     @Autowired FileService fileService;
 
     @PostMapping("/signUp")
-    public ResponseEntity<AuthResponse> signUp(@RequestBody UserDto userDto){
+    public ResponseEntity<AuthResponse> signUp(@RequestBody @Valid UserDto userDto){
         return new ResponseEntity<>(userService.addUser(userDto), HttpStatus.OK);
 
     }
