@@ -74,6 +74,7 @@ public class UserServiceImpl implements UserService {
         logger.info("setting user role...");
         user.setRoles(getRoles());
         user.setName(userData.getFirstName()+" "+userData.getLastName());
+        user.setEmail(userData.getEmail());
         logger.info("saving user and creating wallet...");
         createWallet(userDao.save(user));
         AuthRequest authRequest =new AuthRequest();
