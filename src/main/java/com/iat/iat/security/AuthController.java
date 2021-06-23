@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @CrossOrigin
@@ -23,15 +24,18 @@ public class AuthController {
     private final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @PostMapping("get/token")
-    public ResponseEntity<AuthResponse> createAuthToken(@Valid @RequestBody AuthRequest authRequest){
+    public ResponseEntity<AuthResponse> createAuthToken(@Valid @RequestBody AuthRequest authRequest,
+                                                        HttpServletRequest request,
+                                                        @RequestHeader(value = "User-Agent") String userAgent){
 
-            return new ResponseEntity<>(new AuthResponse(authService.getJwt(authRequest)), HttpStatus.OK);
+            return new ResponseEntity<>(new AuthResponse(authService.getJwt(authRequest, request)), HttpStatus.OK);
         }
 
     @PostMapping("getToken")
-    public ResponseEntity<AuthResponseV2> Authenticate(@Valid @RequestBody AuthRequest authRequest){
-
-        return new ResponseEntity<>(authService.authenticate(authRequest), HttpStatus.OK);
+    public ResponseEntity<AuthResponseV2> Authenticate(@Valid @RequestBody AuthRequest authRequest,
+                                                       HttpServletRequest request,
+                                                       @RequestHeader(value = "User-Agent") String userAgent){
+        return new ResponseEntity<>(authService.authenticate(authRequest, request), HttpStatus.OK);
     }
 
 

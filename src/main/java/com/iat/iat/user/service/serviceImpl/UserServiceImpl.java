@@ -26,6 +26,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Service
@@ -57,7 +58,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public AuthResponse addUser(UserDto createUserDto) {
+    public AuthResponse addUser(UserDto createUserDto, HttpServletRequest request) {
         logger.info("checking user data...");
         //boolean bool1 =pendingUserService.isVerified(createUserDto.getContact());
         //boolean bool2 =userDataService.existsByContact(createUserDto.getContact());
@@ -81,7 +82,7 @@ public class UserServiceImpl implements UserService {
         logger.info("generating auth key...");
         authRequest.setUserName(createUserDto.getContact());
         authRequest.setPassword(createUserDto.getPassWord());
-        return new AuthResponse(authService.getJwt(authRequest));
+        return new AuthResponse(authService.getJwt(authRequest, request));
     }
 
     private void createWallet(User user) {

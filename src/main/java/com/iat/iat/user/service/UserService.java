@@ -6,11 +6,12 @@ import com.iat.iat.user.dto.UserDto;
 import com.iat.iat.user.model.PendingUser;
 import com.iat.iat.user.model.User;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface UserService {
     PendingUser addPendingUser(String contact);
-    AuthResponse addUser(UserDto userDto);
+    AuthResponse addUser(UserDto userDto, HttpServletRequest request);
     User getUser(int id);
     User getUser(String contact);
     List<User> getUsers(String category);

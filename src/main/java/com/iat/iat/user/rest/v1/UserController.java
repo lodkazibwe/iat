@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URL;
@@ -36,8 +37,8 @@ public class UserController {
     @Autowired FileService fileService;
 
     @PostMapping("/signUp")
-    public ResponseEntity<AuthResponse> signUp(@RequestBody UserDto userDto){
-        return new ResponseEntity<>(userService.addUser(userDto), HttpStatus.OK);
+    public ResponseEntity<AuthResponse> signUp(@RequestBody UserDto userDto, HttpServletRequest request){
+        return new ResponseEntity<>(userService.addUser(userDto, request), HttpStatus.OK);
 
     }
 
